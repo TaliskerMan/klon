@@ -13,7 +13,7 @@ class BackupPage(Adw.PreferencesPage):
         self.window = window
         
         self.set_title("Backup to Image")
-        self.set_icon_name("klon-backup-symbolic")
+        self.set_icon_name("klon-backup")
 
         # Configuration Group
         self.conf_group = Adw.PreferencesGroup()

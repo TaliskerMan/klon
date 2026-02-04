@@ -13,7 +13,7 @@ class ClonePage(Adw.PreferencesPage):
         self.window = window # Reference to parent window for dialogs
         
         self.set_title("Clone Drive")
-        self.set_icon_name("klon-clone-symbolic")
+        self.set_icon_name("klon-clone")
 
         # Drive Selection Group
         self.drive_group = Adw.PreferencesGroup()

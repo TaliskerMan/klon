@@ -1,4 +1,4 @@
 data/com.taliskerman.klon.png usr/share/icons/hicolor/512x512/apps/
 data/com.taliskerman.klon.desktop usr/share/applications/
-data/icons/* usr/share/icons/hicolor/symbolic/apps/
+data/icons/* usr/share/icons/hicolor/128x128/apps/
 src/klon usr/lib/python3/dist-packages/

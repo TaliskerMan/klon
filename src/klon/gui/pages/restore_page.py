@@ -13,7 +13,7 @@ class RestorePage(Adw.PreferencesPage):
         self.window = window
         
         self.set_title("Restore from Image")
-        self.set_icon_name("klon-restore-symbolic")
+        self.set_icon_name("klon-restore")
 
         # Configuration Group
         self.conf_group = Adw.PreferencesGroup()

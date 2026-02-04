@@ -14,7 +14,7 @@ class IsoPage(Adw.PreferencesPage):
         self.window = window
         
         self.set_title("Recovery Drive")
-        self.set_icon_name("klon-usb-symbolic")
+        self.set_icon_name("klon-usb")
 
         # Configuration Group
         self.conf_group = Adw.PreferencesGroup()
