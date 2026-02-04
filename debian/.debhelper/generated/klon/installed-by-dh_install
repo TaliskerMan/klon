@@ -1,3 +1,7 @@
 ./data/com.taliskerman.klon.png
 ./data/com.taliskerman.klon.desktop
+./data/icons/klon-backup-symbolic.svg
+./data/icons/klon-clone-symbolic.svg
+./data/icons/klon-restore-symbolic.svg
+./data/icons/klon-usb-symbolic.svg
 ./src/klon

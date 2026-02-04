@@ -1,0 +1,32 @@
+/* Make suggested action buttons more pronounced */
+button.suggested-action {
+    background-color: alpha(@accent_bg_color, 0.9);
+    border: 1px solid shade(@accent_bg_color, 0.8);
+    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+button.suggested-action:hover {
+    background-color: @accent_bg_color;
+    box-shadow: 0 0 0 2px alpha(@accent_bg_color, 0.3);
+}
+
+/* Make destructive buttons more pronounced */
+button.destructive-action {
+    background-color: alpha(@destructive_bg_color, 0.9);
+    border: 1px solid shade(@destructive_bg_color, 0.8);
+}
+
+button.destructive-action:hover {
+    background-color: @destructive_bg_color;
+    box-shadow: 0 0 0 2px alpha(@destructive_bg_color, 0.3);
+}
+
+/* Add visible outlines to other buttons if requested, or specific classes */
+/* The user asked for "other button outlines should be visible at all times" */
+button.pill {
+    border: 1px solid alpha(@window_fg_color, 0.2);
+}
+
+button.pill:hover {
+    border-color: alpha(@window_fg_color, 0.4);
+}
