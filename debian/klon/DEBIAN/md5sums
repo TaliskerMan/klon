@@ -1,9 +1,9 @@
 62c9335ed6a771f8367b9eab735b5359  usr/bin/klon
-c72246579c4437c07cebb86fbcbc6d90  usr/lib/python3/dist-packages/klon-0.1.4.dist-info/INSTALLER
-d61c2184576444a48396521b403bc805  usr/lib/python3/dist-packages/klon-0.1.4.dist-info/METADATA
-a227bf38fb17005b3bdb56ccc428b1bb  usr/lib/python3/dist-packages/klon-0.1.4.dist-info/WHEEL
-b2eeb02eaea27797cc7301b0e75d8c53  usr/lib/python3/dist-packages/klon-0.1.4.dist-info/entry_points.txt
-723ad62a6d477ca3fe9f190f62cc68c9  usr/lib/python3/dist-packages/klon-0.1.4.dist-info/top_level.txt
+c72246579c4437c07cebb86fbcbc6d90  usr/lib/python3/dist-packages/klon-0.1.5.dist-info/INSTALLER
+7aedd4aaed9eff32a288d7ba3da48c9d  usr/lib/python3/dist-packages/klon-0.1.5.dist-info/METADATA
+a227bf38fb17005b3bdb56ccc428b1bb  usr/lib/python3/dist-packages/klon-0.1.5.dist-info/WHEEL
+b2eeb02eaea27797cc7301b0e75d8c53  usr/lib/python3/dist-packages/klon-0.1.5.dist-info/entry_points.txt
+723ad62a6d477ca3fe9f190f62cc68c9  usr/lib/python3/dist-packages/klon-0.1.5.dist-info/top_level.txt
 d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/__init__.py
 d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/backend/__init__.py
 d51c67084e788eca3f855083530921ce  usr/lib/python3/dist-packages/klon/backend/clone.py
@@ -20,10 +20,10 @@ d2a887d0fabda55ec5fb72a36835089e  usr/lib/python3/dist-packages/klon/gui/pages/r
 3f970adda6f6b412ceb3cdc8f0c1adb1  usr/lib/python3/dist-packages/klon/main.py
 44f33509896354b12edcf382e195c0b3  usr/lib/python3/dist-packages/klon/style.css
 8e703654cef4a73165daeb23718abbfd  usr/share/applications/com.taliskerman.klon.desktop
-a4824895586ea4ade60c20d5a13e1f28  usr/share/doc/klon/changelog.Debian.gz
+cec0446df9ab9efdc8d90d9494fad729  usr/share/doc/klon/changelog.Debian.gz
 8f3f565f78dd780c6a1f3f7152fbd12a  usr/share/doc/klon/copyright
 d41d8cd98f00b204e9800998ecf8427e  usr/share/icons/hicolor/128x128/apps/klon-backup.png
 d41d8cd98f00b204e9800998ecf8427e  usr/share/icons/hicolor/128x128/apps/klon-clone.png
 d41d8cd98f00b204e9800998ecf8427e  usr/share/icons/hicolor/128x128/apps/klon-restore.png
 d41d8cd98f00b204e9800998ecf8427e  usr/share/icons/hicolor/128x128/apps/klon-usb.png
-4bb11673087fdb965560b13775ff130a  usr/share/icons/hicolor/512x512/apps/com.taliskerman.klon.png
+c41ffaead31e3914e634cee4e64c7047  usr/share/icons/hicolor/512x512/apps/com.taliskerman.klon.png

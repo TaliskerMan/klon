@@ -13,9 +13,9 @@ klon/gui/pages/backup_page.py,sha256=J1fOV3qk-wT6PN60RJiUBhSzBDJRL8YiyW6FO5paSw8
 klon/gui/pages/clone_page.py,sha256=L5ii3Aa1IHO0-oYxzewlpxn34lsVkx53bsBiqeZXFpI,5577
 klon/gui/pages/iso_page.py,sha256=s_OJS5kDAjY0iVSW1bXgO21IluQxndeddc_ycxZEIFA,7934
 klon/gui/pages/restore_page.py,sha256=-SzxIvzugyQn_PaRDXJsUbD5v17spGxJJvdOymbcFtg,6098
-klon-0.1.4.dist-info/LICENSE,sha256=yR87M0LzZ6rmO3CS6ewy3ud7nLkQ4bKG9gevGbIflWM,35067
-klon-0.1.4.dist-info/METADATA,sha256=fgXkKP1F3aHrREt3O5a00fDv8u7R4mg8HseCUn17IhM,1311
-klon-0.1.4.dist-info/WHEEL,sha256=oiQVh_5PnQM0E3gPdiz09WCNmwiHDMaGer_elqB3coM,92
-klon-0.1.4.dist-info/entry_points.txt,sha256=7vNSFQBIHpJxKQZrR9aaGGABpjHoQohAPOg-W229DtY,40
-klon-0.1.4.dist-info/top_level.txt,sha256=6fwGn88QSEHhBYF8X3D-7-p3i6uy0jmSsKX6ssumpN4,5
-klon-0.1.4.dist-info/RECORD,,
+klon-0.1.5.dist-info/LICENSE,sha256=yR87M0LzZ6rmO3CS6ewy3ud7nLkQ4bKG9gevGbIflWM,35067
+klon-0.1.5.dist-info/METADATA,sha256=Ytvxc6vLcrtTKqTM7jbAiXAoqeYBQPwYW-JC056ShG8,1311
+klon-0.1.5.dist-info/WHEEL,sha256=oiQVh_5PnQM0E3gPdiz09WCNmwiHDMaGer_elqB3coM,92
+klon-0.1.5.dist-info/entry_points.txt,sha256=7vNSFQBIHpJxKQZrR9aaGGABpjHoQohAPOg-W229DtY,40
+klon-0.1.5.dist-info/top_level.txt,sha256=6fwGn88QSEHhBYF8X3D-7-p3i6uy0jmSsKX6ssumpN4,5
+klon-0.1.5.dist-info/RECORD,,
