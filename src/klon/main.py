@@ -4,7 +4,10 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, Gio
+
+from .gui.window import MainWindow
+from .gui.about import AboutDialog
 
 class KlonApp(Adw.Application):
     def __init__(self):
@@ -12,17 +15,22 @@ class KlonApp(Adw.Application):
                          flags=0)
 
     def do_activate(self):
-        window = Adw.ApplicationWindow(application=self)
-        window.set_title("Klon")
-        window.set_default_size(800, 600)
+        win = self.props.active_window
+        if not win:
+            win = MainWindow(application=self)
+        win.present()
+        
+    def do_startup(self):
+        super().do_startup()
+        
+        # Add About Action
+        action = Gio.SimpleAction.new("about", None)
+        action.connect("activate", self.on_about_action)
+        self.add_action(action)
 
-        content = Adw.StatusPage()
-        content.set_title("Welcome to Klon")
-        content.set_description("System Cloning & Recovery Tool")
-        content.set_icon_name("drive-harddisk-system-symbolic")
-
-        window.set_content(content)
-        window.present()
+    def on_about_action(self, action, param):
+        about = AboutDialog(transient_for=self.props.active_window, application=self)
+        about.present()
 
 def main():
     app = KlonApp()
