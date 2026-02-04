@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "klon"
+version = "0.1.0"
+description = "A system cloning and recovery tool for Pop!_OS"
+readme = "README.md"
+authors = [
+  { name = "Chuck Talk", email = "cwtalk1@gmail.com" },
+]
+license = { text = "GPL-3.0-or-later" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "PyGObject",
+]
+
+[project.scripts]
+klon = "klon.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
