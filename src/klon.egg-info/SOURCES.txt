@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+src/klon/__init__.py
+src/klon/main.py
+src/klon.egg-info/PKG-INFO
+src/klon.egg-info/SOURCES.txt
+src/klon.egg-info/dependency_links.txt
+src/klon.egg-info/entry_points.txt
+src/klon.egg-info/requires.txt
+src/klon.egg-info/top_level.txt
+src/klon/backend/__init__.py
+src/klon/backend/clone.py
+src/klon/backend/drives.py
+src/klon/gui/__init__.py
+src/klon/gui/about.py
+src/klon/gui/window.py

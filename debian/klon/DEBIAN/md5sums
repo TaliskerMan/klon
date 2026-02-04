@@ -1,0 +1,16 @@
+62c9335ed6a771f8367b9eab735b5359  usr/bin/klon
+c72246579c4437c07cebb86fbcbc6d90  usr/lib/python3/dist-packages/klon-0.1.0.dist-info/INSTALLER
+82d9522ad028a998aee9cee166d49e80  usr/lib/python3/dist-packages/klon-0.1.0.dist-info/METADATA
+a227bf38fb17005b3bdb56ccc428b1bb  usr/lib/python3/dist-packages/klon-0.1.0.dist-info/WHEEL
+b2eeb02eaea27797cc7301b0e75d8c53  usr/lib/python3/dist-packages/klon-0.1.0.dist-info/entry_points.txt
+723ad62a6d477ca3fe9f190f62cc68c9  usr/lib/python3/dist-packages/klon-0.1.0.dist-info/top_level.txt
+d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/__init__.py
+d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/backend/__init__.py
+4a6d030f3af67d7664280122bf4b434d  usr/lib/python3/dist-packages/klon/backend/clone.py
+dddd59517f94222018c2f3cf121570cb  usr/lib/python3/dist-packages/klon/backend/drives.py
+d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/gui/__init__.py
+a84c0d328b71c3fcf289c30240270a46  usr/lib/python3/dist-packages/klon/gui/about.py
+a38205b0051c630172ec626f1c17cfc6  usr/lib/python3/dist-packages/klon/gui/window.py
+1005d75bb1cd4ee47ca7783d9523f75f  usr/lib/python3/dist-packages/klon/main.py
+4de5f65a61f57d833aee647aa8445763  usr/share/doc/klon/changelog.Debian.gz
+8f3f565f78dd780c6a1f3f7152fbd12a  usr/share/doc/klon/copyright

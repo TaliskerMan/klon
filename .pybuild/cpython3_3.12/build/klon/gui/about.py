@@ -13,4 +13,4 @@ class AboutDialog(Adw.AboutWindow):
         self.set_license_type(Gtk.License.GPL_3_0)
         self.set_website("https://github.com/chucktalk/klon")
         self.set_issue_url("https://github.com/chucktalk/klon/issues")
-        self.set_logo_icon_name("com.taliskerman.klon") 
+        self.set_application_icon("drive-harddisk-system-symbolic") 

@@ -62,21 +62,6 @@ def clone_drive(source_path: str, dest_path: str, update_callback=None):
         print(f"Cloning failed: {e}")
         raise
 
-def backup_to_image(source_device: str, image_path: str, update_callback=None):
-    """
-    Creates a disk image from source_device.
-    """
-    clone_drive(source_device, image_path, update_callback)
-
-def restore_from_image(image_path: str, dest_device: str, update_callback=None):
-    """
-    Restores a disk image to dest_device.
-    """
-    if not os.path.exists(image_path):
-        raise ValueError(f"Image file {image_path} does not exist")
-    
-    clone_drive(image_path, dest_device, update_callback)
-
 if __name__ == "__main__":
     # Test stub - DO NOT RUN without valid args
     print("This module provides cloning functionality. Import it to use.")

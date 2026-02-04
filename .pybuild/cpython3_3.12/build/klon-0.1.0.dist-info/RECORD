@@ -1,0 +1,15 @@
+../scripts/klon,sha256=8F_GDIDeWBk8XIndb-pQYFcI6MxcnhzO2LB-J6VSMNQ,208
+klon/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+klon/main.py,sha256=F87iCi6pmjALzlD8vPRfjVHhY_LDjJbaAtFtNR9G8RY,1019
+klon/backend/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+klon/backend/clone.py,sha256=mnb4eshNogzGlAPprCpk5HPLrz-cujfnf1YtdoO5xXY,2373
+klon/backend/drives.py,sha256=LqY1AMXcEgDqCpMSLkWiiaR5HIxQ17l6ikbyWtCW-mE,2129
+klon/gui/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+klon/gui/about.py,sha256=gDD81AztP9S93oRY4QB-4IHiqk6jrYu6AOBCRqKSxI0,653
+klon/gui/window.py,sha256=Xn4Imi78mG2NLsoPBnoKgzQmn5BsN9JhB979VUbxtHw,6214
+klon-0.1.0.dist-info/LICENSE,sha256=yR87M0LzZ6rmO3CS6ewy3ud7nLkQ4bKG9gevGbIflWM,35067
+klon-0.1.0.dist-info/METADATA,sha256=HBD3A5l9HsMPANDNr-K531heI4sjO3nWT1Lc33aA9LE,1287
+klon-0.1.0.dist-info/WHEEL,sha256=oiQVh_5PnQM0E3gPdiz09WCNmwiHDMaGer_elqB3coM,92
+klon-0.1.0.dist-info/entry_points.txt,sha256=7vNSFQBIHpJxKQZrR9aaGGABpjHoQohAPOg-W229DtY,40
+klon-0.1.0.dist-info/top_level.txt,sha256=6fwGn88QSEHhBYF8X3D-7-p3i6uy0jmSsKX6ssumpN4,5
+klon-0.1.0.dist-info/RECORD,,
