@@ -7,7 +7,7 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw, Gio
 
 from .gui.window import MainWindow
-from .gui.about import AboutDialog
+from .gui.about import show_about_dialog
 
 class KlonApp(Adw.Application):
     def __init__(self):
@@ -29,8 +29,9 @@ class KlonApp(Adw.Application):
         self.add_action(action)
 
     def on_about_action(self, action, param):
-        about = AboutDialog(transient_for=self.props.active_window, application=self)
-        about.present()
+        win = self.props.active_window
+        if win:
+            show_about_dialog(win)
 
 def main():
     app = KlonApp()

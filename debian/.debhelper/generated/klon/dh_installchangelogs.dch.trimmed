@@ -1,3 +1,11 @@
+klon (0.1.1-1) unstable; urgency=medium
+
+  * Fix crash in About dialog.
+  * Add desktop launcher.
+  * Add requests dependency.
+
+ -- Chuck Talk <cwtalk1@gmail.com>  Wed, 04 Feb 2026 13:00:00 -0600
+
 klon (0.1.0-1) unstable; urgency=medium
 
   * Initial release.
