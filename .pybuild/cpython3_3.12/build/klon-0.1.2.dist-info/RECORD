@@ -1,6 +1,6 @@
 ../scripts/klon,sha256=8F_GDIDeWBk8XIndb-pQYFcI6MxcnhzO2LB-J6VSMNQ,208
 klon/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
-klon/main.py,sha256=cOpegKusI9feLLusLBj_d7nz4YZ1J3RY_V7H0MQcf3M,1005
+klon/main.py,sha256=hV4FasPZ1HOJYKP3Lnai-frsgZy04TlFe3PxK24al3U,1047
 klon/backend/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
 klon/backend/clone.py,sha256=A7utykFra_x89SsbFXOgp3KIGbhHz5qgNrkPRypZzzA,2885
 klon/backend/drives.py,sha256=LqY1AMXcEgDqCpMSLkWiiaR5HIxQ17l6ikbyWtCW-mE,2129
@@ -13,9 +13,9 @@ klon/gui/pages/backup_page.py,sha256=UMve-FJiVaBCjqtyaTtzIbjzqAhQHigvtiMmcYu-BNo
 klon/gui/pages/clone_page.py,sha256=vzSrWSJDSUJIuKGaP_GAMk10SbtQPGZBYjpr0ylMn-U,5590
 klon/gui/pages/iso_page.py,sha256=g_Fqvyzw6aaYZdcz_DjNQROrGHMxMvbTHEe8bMU8gg4,7946
 klon/gui/pages/restore_page.py,sha256=6ltbPQiONAK9gnQ39fJ1NajihoHCOAQlVZFAEUYitVA,6110
-klon-0.1.1.dist-info/LICENSE,sha256=yR87M0LzZ6rmO3CS6ewy3ud7nLkQ4bKG9gevGbIflWM,35067
-klon-0.1.1.dist-info/METADATA,sha256=_nyasSfjvPqYyKV9hh0IuZNkMcdV76zcAqytLD4r6q4,1311
-klon-0.1.1.dist-info/WHEEL,sha256=oiQVh_5PnQM0E3gPdiz09WCNmwiHDMaGer_elqB3coM,92
-klon-0.1.1.dist-info/entry_points.txt,sha256=7vNSFQBIHpJxKQZrR9aaGGABpjHoQohAPOg-W229DtY,40
-klon-0.1.1.dist-info/top_level.txt,sha256=6fwGn88QSEHhBYF8X3D-7-p3i6uy0jmSsKX6ssumpN4,5
-klon-0.1.1.dist-info/RECORD,,
+klon-0.1.2.dist-info/LICENSE,sha256=yR87M0LzZ6rmO3CS6ewy3ud7nLkQ4bKG9gevGbIflWM,35067
+klon-0.1.2.dist-info/METADATA,sha256=sabZ8BxVGi05cR9dBlVq56YmU0Nr16wPqJTOuWYf7II,1311
+klon-0.1.2.dist-info/WHEEL,sha256=oiQVh_5PnQM0E3gPdiz09WCNmwiHDMaGer_elqB3coM,92
+klon-0.1.2.dist-info/entry_points.txt,sha256=7vNSFQBIHpJxKQZrR9aaGGABpjHoQohAPOg-W229DtY,40
+klon-0.1.2.dist-info/top_level.txt,sha256=6fwGn88QSEHhBYF8X3D-7-p3i6uy0jmSsKX6ssumpN4,5
+klon-0.1.2.dist-info/RECORD,,

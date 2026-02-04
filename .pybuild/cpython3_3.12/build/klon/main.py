@@ -12,7 +12,7 @@ from .gui.about import show_about_dialog
 class KlonApp(Adw.Application):
     def __init__(self):
         super().__init__(application_id='com.taliskerman.klon',
-                         flags=0)
+                         flags=Gio.ApplicationFlags.FLAGS_NONE)
 
     def do_activate(self):
         win = self.props.active_window
@@ -21,7 +21,7 @@ class KlonApp(Adw.Application):
         win.present()
         
     def do_startup(self):
-        super().do_startup()
+        Gtk.Application.do_startup(self)
         
         # Add About Action
         action = Gio.SimpleAction.new("about", None)

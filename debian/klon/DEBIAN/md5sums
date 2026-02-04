@@ -1,9 +1,9 @@
 62c9335ed6a771f8367b9eab735b5359  usr/bin/klon
-c72246579c4437c07cebb86fbcbc6d90  usr/lib/python3/dist-packages/klon-0.1.1.dist-info/INSTALLER
-cdd0d3d82c7caa4816dbee3b5ae56192  usr/lib/python3/dist-packages/klon-0.1.1.dist-info/METADATA
-a227bf38fb17005b3bdb56ccc428b1bb  usr/lib/python3/dist-packages/klon-0.1.1.dist-info/WHEEL
-b2eeb02eaea27797cc7301b0e75d8c53  usr/lib/python3/dist-packages/klon-0.1.1.dist-info/entry_points.txt
-723ad62a6d477ca3fe9f190f62cc68c9  usr/lib/python3/dist-packages/klon-0.1.1.dist-info/top_level.txt
+c72246579c4437c07cebb86fbcbc6d90  usr/lib/python3/dist-packages/klon-0.1.2.dist-info/INSTALLER
+d7c2c730b3ab831ef8db3dc00555ffb6  usr/lib/python3/dist-packages/klon-0.1.2.dist-info/METADATA
+a227bf38fb17005b3bdb56ccc428b1bb  usr/lib/python3/dist-packages/klon-0.1.2.dist-info/WHEEL
+b2eeb02eaea27797cc7301b0e75d8c53  usr/lib/python3/dist-packages/klon-0.1.2.dist-info/entry_points.txt
+723ad62a6d477ca3fe9f190f62cc68c9  usr/lib/python3/dist-packages/klon-0.1.2.dist-info/top_level.txt
 d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/__init__.py
 d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/backend/__init__.py
 d51c67084e788eca3f855083530921ce  usr/lib/python3/dist-packages/klon/backend/clone.py
@@ -17,8 +17,8 @@ d41d8cd98f00b204e9800998ecf8427e  usr/lib/python3/dist-packages/klon/gui/pages/_
 c4ea5f50b7153c9dc24c30612f75b50e  usr/lib/python3/dist-packages/klon/gui/pages/iso_page.py
 650168fa75e1bd4dca0d0a92cc87a890  usr/lib/python3/dist-packages/klon/gui/pages/restore_page.py
 88501dba9797df7f563a369e588e40da  usr/lib/python3/dist-packages/klon/gui/window.py
-32ba396968b64d53dd45a56d8ca4d902  usr/lib/python3/dist-packages/klon/main.py
+285f88b7a53504fdf449e1881b04b27a  usr/lib/python3/dist-packages/klon/main.py
 8e703654cef4a73165daeb23718abbfd  usr/share/applications/com.taliskerman.klon.desktop
-52acca28063467e202705242911227f3  usr/share/doc/klon/changelog.Debian.gz
+a996c3e2be9723a8dbf366b6f99332e7  usr/share/doc/klon/changelog.Debian.gz
 8f3f565f78dd780c6a1f3f7152fbd12a  usr/share/doc/klon/copyright
 7f8cf5f6a1e68669c78f2684b3137212  usr/share/icons/hicolor/512x512/apps/com.taliskerman.klon.png
