@@ -9,16 +9,9 @@ from ...backend.clone import restore_from_image
 
 class RestorePage(Gtk.Box):
     def __init__(self, window, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
         self.window = window
         
-        self.set_title("Restore from Image")
-        self.set_icon_name("klon-restore")
-
-        # Configuration Group
-        self.conf_group = Adw.PreferencesGroup()
-        self.conf_group.set_title("Restore Configuration")
-
         self.pref_page = Adw.PreferencesPage()
         self.scrolled = Gtk.ScrolledWindow()
         self.scrolled.set_child(self.pref_page)
