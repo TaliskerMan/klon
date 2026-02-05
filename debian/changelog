@@ -1,3 +1,9 @@
+klon (0.1.7-1) unstable; urgency=medium
+
+  * Custom About Page with large PNG action buttons for Website and Issues.
+
+ -- Chuck Talk <cwtalk1@gmail.com>  Wed, 04 Feb 2026 18:00:00 -0600
+
 klon (0.1.6-1) unstable; urgency=medium
 
   * Restored and fixed original icon transparency (circular crop).
