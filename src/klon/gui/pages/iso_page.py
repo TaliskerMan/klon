@@ -114,7 +114,7 @@ class IsoPage(Gtk.Box):
         self.drives = list_drives()
         drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
         self.dest_model = Gtk.StringList.new(drive_strings)
-        self.dest_dropdown.set_model(self.dest_model)
+        self.target_dropdown.set_model(self.dest_model)
 
     def on_download_clicked(self, btn):
         self.download_btn.set_sensitive(False)
@@ -160,7 +160,7 @@ class IsoPage(Gtk.Box):
         dialog.destroy()
 
     def on_create_clicked(self, btn):
-        dest_idx = self.dest_dropdown.get_selected()
+        dest_idx = self.target_dropdown.get_selected()
         if dest_idx == Gtk.INVALID_LIST_POSITION:
             self.show_error("Please select a target USB drive.")
             return

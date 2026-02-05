@@ -1,3 +1,10 @@
+klon (0.2.3-1) unstable; urgency=medium
+
+  * Fix AttributeError in IsoPage (target_dropdown vs dest_dropdown).
+  * This restores the Recovery USB page functionality.
+
+ -- Chuck Talk <cwtalk1@gmail.com>  Wed, 04 Feb 2026 20:15:00 -0600
+
 klon (0.2.2-1) unstable; urgency=medium
 
   * Fix crash in Recovery USB page (ActionRow directly in Page).
