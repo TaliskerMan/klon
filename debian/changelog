@@ -1,3 +1,11 @@
+klon (0.1.9-1) unstable; urgency=medium
+
+  * Fix regression in About page layout (restore buttons).
+  * Ensure icon cache is updated via postinst.
+  * Correct links and version fallbacks.
+
+ -- Chuck Talk <cwtalk1@gmail.com>  Wed, 04 Feb 2026 19:15:00 -0600
+
 klon (0.1.8-1) unstable; urgency=medium
 
   * Fix missing icons (add postinst to update icon cache).

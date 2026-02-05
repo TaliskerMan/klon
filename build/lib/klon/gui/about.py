@@ -11,14 +11,7 @@ def get_version():
     try:
         return version("klon")
     except PackageNotFoundError:
-        # Fallback for dev environment
-        try:
-            with open(Path(__file__).parents[2] / "pyproject.toml") as f:
-                for line in f:
-                    if line.startswith('version = "'):
-                        return line.split('"')[1]
-        except:
-            return "0.0.0-dev"
+        return "0.1.8" # Hardcoded fallback matched to current release
 
 def show_license_dialog(parent):
     win = Adw.Window(transient_for=parent)
@@ -82,7 +75,10 @@ def show_about_dialog(parent, app_name="Klon"):
     
     ver = get_version()
         
+    ver = get_version()
+        
     page.set_description(f"System Cloning & Recovery Tool\nVersion {ver}\n\n© 2026 Chuck Talk")
+    
     toolbar_view.set_content(page)
     
     # Action Box for Custom Buttons

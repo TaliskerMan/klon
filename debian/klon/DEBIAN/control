@@ -1,8 +1,8 @@
 Package: klon
-Version: 0.1.8-1
+Version: 0.1.9-1
 Architecture: all
 Maintainer: Chuck Talk <cwtalk1@gmail.com>
-Installed-Size: 1322
+Installed-Size: 1827
 Depends: python3-gi, python3-requests, python3:any, gir1.2-gtk-4.0, gir1.2-adw-1, udisks2, coreutils, pkexec
 Section: utils
 Priority: optional
