@@ -40,11 +40,17 @@ class IsoPage(Gtk.Box):
         self.dl_button.connect("clicked", self.on_download_clicked)
         self.dl_row.add_suffix(self.dl_button)
 
+        # ISO Selection Group
+        self.iso_group = Adw.PreferencesGroup()
+        self.iso_group.set_title("ISO Image")
+        self.iso_group.set_description("Select the .iso file to flash.")
+        self.pref_page.add(self.iso_group)
+
         # ISO Selection Row
         self.iso_row = Adw.ActionRow()
         self.iso_row.set_title("Select ISO Image")
         self.iso_row.set_subtitle("The .iso file to flash")
-        self.pref_page.add(self.iso_row)
+        self.iso_group.add(self.iso_row)
 
         self.file_chooser_btn = Gtk.Button(icon_name="folder-open-symbolic")
         self.file_chooser_btn.set_valign(Gtk.Align.CENTER)
