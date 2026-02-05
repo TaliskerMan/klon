@@ -1,3 +1,11 @@
+klon (0.1.8-1) unstable; urgency=medium
+
+  * Fix missing icons (add postinst to update icon cache).
+  * Fix About links (chucktalk.com, mailto) and version display.
+  * Add local License viewer dialog.
+
+ -- Chuck Talk <cwtalk1@gmail.com>  Wed, 04 Feb 2026 19:00:00 -0600
+
 klon (0.1.7-1) unstable; urgency=medium
 
   * Custom About Page with large PNG action buttons for Website and Issues.

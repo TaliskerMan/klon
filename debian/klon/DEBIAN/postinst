@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+if [ "$1" = "configure" ]; then
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor || true
+fi
+
+
 # Automatically added by dh_python3
 if command -v py3compile >/dev/null 2>&1; then
 	py3compile -p klon 
@@ -10,3 +15,4 @@ if command -v pypy3compile >/dev/null 2>&1; then
 fi
 
 # End automatically added section
+
