@@ -30,3 +30,4 @@ button.pill {
 button.pill:hover {
     border-color: alpha(@window_fg_color, 0.4);
 }
+button.selected label { font-weight: bold; }

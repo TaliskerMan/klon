@@ -7,40 +7,43 @@ import threading
 from ...backend.drives import list_drives
 from ...backend.clone import backup_to_image
 
-class BackupPage(Adw.PreferencesPage):
+class BackupPage(Gtk.Box):
     def __init__(self, window, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
         self.window = window
         
-        self.set_title("Backup to Image")
-        self.set_icon_name("klon-backup")
+        self.pref_page = Adw.PreferencesPage()
+        self.scrolled = Gtk.ScrolledWindow()
+        self.scrolled.set_child(self.pref_page)
+        self.scrolled.set_vexpand(True)
+        self.append(self.scrolled)
 
-        # Configuration Group
-        self.conf_group = Adw.PreferencesGroup()
-        self.conf_group.set_title("Backup Configuration")
-        self.conf_group.set_description("Create a disk image of a drive.")
-        self.add(self.conf_group)
-
-        # Source Drive Row
+        # Source Selection
+        self.source_group = Adw.PreferencesGroup()
+        self.source_group.set_title("Source")
+        self.pref_page.add(self.source_group)
+        
         self.source_row = Adw.ActionRow()
-        self.source_row.set_title("Source Drive")
-        self.source_row.set_subtitle("The drive to back up")
-        self.conf_group.add(self.source_row)
-
+        self.source_row.set_title("Drive to Backup")
+        self.source_group.add(self.source_row)
+        
         self.source_dropdown = Gtk.DropDown()
         self.source_dropdown.set_valign(Gtk.Align.CENTER)
         self.source_row.add_suffix(self.source_dropdown)
 
-        # Destination File Row
+        # Dest Selection
+        self.dest_group = Adw.PreferencesGroup()
+        self.dest_group.set_title("Destination Image")
+        self.pref_page.add(self.dest_group)
+        
         self.dest_row = Adw.ActionRow()
-        self.dest_row.set_title("Destination Image")
-        self.dest_row.set_subtitle("Where to save the .img file")
-        self.conf_group.add(self.dest_row)
-
-        self.file_chooser_btn = Gtk.Button(icon_name="folder-open-symbolic")
-        self.file_chooser_btn.set_valign(Gtk.Align.CENTER)
-        self.file_chooser_btn.connect("clicked", self.on_file_chooser_clicked)
-        self.dest_row.add_suffix(self.file_chooser_btn)
+        self.dest_row.set_title("Select File Location")
+        self.dest_group.add(self.dest_row)
+        
+        self.dest_button = Gtk.Button(icon_name="document-open-symbolic")
+        self.dest_button.set_valign(Gtk.Align.CENTER)
+        self.dest_button.connect("clicked", self.on_file_chooser_clicked)
+        self.dest_row.add_suffix(self.dest_button)
         
         self.dest_path_label = Gtk.Label(label="No file selected")
         self.dest_path_label.add_css_class("dim-label")
@@ -52,7 +55,7 @@ class BackupPage(Adw.PreferencesPage):
 
         # Action Group
         self.action_group = Adw.PreferencesGroup()
-        self.add(self.action_group)
+        self.pref_page.add(self.action_group)
 
         # Backup Button
         self.backup_btn = Gtk.Button(label="Start Backup")
@@ -63,9 +66,16 @@ class BackupPage(Adw.PreferencesPage):
         self.backup_btn.set_halign(Gtk.Align.CENTER)
         self.action_group.add(self.backup_btn)
 
+        # Status Label
         self.status_label = Gtk.Label(label="Ready")
         self.status_label.set_margin_top(10)
         self.action_group.add(self.status_label)
+
+        self.icon_image = Gtk.Image.new_from_icon_name("klon-backup")
+        self.icon_image.set_pixel_size(128)
+        self.icon_image.set_margin_bottom(20)
+        self.icon_image.set_valign(Gtk.Align.END)
+        self.append(self.icon_image)
 
         self.refresh_drives()
 

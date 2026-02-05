@@ -1,3 +1,11 @@
+klon (0.2.0-1) unstable; urgency=medium
+
+  * UI Redesign: Text-only bold tabs.
+  * Pages now feature large branding icons at the bottom.
+  * Standardized About dialog with native license view.
+
+ -- Chuck Talk <cwtalk1@gmail.com>  Wed, 04 Feb 2026 19:30:00 -0600
+
 klon (0.1.9-1) unstable; urgency=medium
 
   * Fix regression in About page layout (restore buttons).

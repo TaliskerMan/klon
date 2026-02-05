@@ -7,19 +7,25 @@ import threading
 from ...backend.drives import list_drives
 from ...backend.clone import clone_drive
 
-class ClonePage(Adw.PreferencesPage):
+class ClonePage(Gtk.Box):
     def __init__(self, window, **kwargs):
-        super().__init__(**kwargs)
-        self.window = window # Reference to parent window for dialogs
+        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
+        self.window = window
+
+        # Internal Preferences Page for controls
+        self.pref_page = Adw.PreferencesPage()
         
-        self.set_title("Clone Drive")
-        self.set_icon_name("klon-clone")
+        # Scrolled Window for Pref Page (so it handles overflow if small)
+        self.scrolled = Gtk.ScrolledWindow()
+        self.scrolled.set_child(self.pref_page)
+        self.scrolled.set_vexpand(True) 
+        self.append(self.scrolled) # Add to Box
 
         # Drive Selection Group
         self.drive_group = Adw.PreferencesGroup()
         self.drive_group.set_title("Cloning Configuration")
         self.drive_group.set_description("Select source and destination drives.")
-        self.add(self.drive_group)
+        self.pref_page.add(self.drive_group)
 
         # Source Drive Row
         self.source_row = Adw.ActionRow()
@@ -43,7 +49,7 @@ class ClonePage(Adw.PreferencesPage):
 
         # Action Group
         self.action_group = Adw.PreferencesGroup()
-        self.add(self.action_group)
+        self.pref_page.add(self.action_group)
 
         # Clone Button
         self.clone_button = Gtk.Button(label="Start Cloning")
@@ -58,6 +64,13 @@ class ClonePage(Adw.PreferencesPage):
         self.status_label = Gtk.Label(label="Ready")
         self.status_label.set_margin_top(10)
         self.action_group.add(self.status_label)
+        
+        # Bottom Branding Icon
+        self.icon_image = Gtk.Image.new_from_icon_name("klon-clone")
+        self.icon_image.set_pixel_size(128)
+        self.icon_image.set_margin_bottom(20)
+        self.icon_image.set_valign(Gtk.Align.END)
+        self.append(self.icon_image)
 
         # Populate drives
         self.refresh_drives()

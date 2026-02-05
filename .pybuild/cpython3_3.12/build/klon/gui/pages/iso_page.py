@@ -8,36 +8,43 @@ import os
 from ...backend.drives import list_drives
 from ...backend.iso import download_iso, flash_iso_and_setup_persistence, DEFAULT_ISO_URL, DEFAULT_ISO_NAME
 
-class IsoPage(Adw.PreferencesPage):
+class IsoPage(Gtk.Box):
     def __init__(self, window, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
         self.window = window
         
-        self.set_title("Recovery Drive")
-        self.set_icon_name("klon-usb")
+        self.pref_page = Adw.PreferencesPage()
+        self.scrolled = Gtk.ScrolledWindow()
+        self.scrolled.set_child(self.pref_page)
+        self.scrolled.set_vexpand(True)
+        self.append(self.scrolled)
 
         # Configuration Group
-        self.conf_group = Adw.PreferencesGroup()
-        self.conf_group.set_title("Create Bootable Media")
-        self.conf_group.set_description("Create a bootable USB drive to run Klon for bare-metal restoration.")
-        self.add(self.conf_group)
+        # self.conf_group = Adw.PreferencesGroup()
+        # self.conf_group.set_title("Create Bootable Media")
+        # self.conf_group.set_description("Create a bootable USB drive to run Klon for bare-metal restoration.")
+        # self.add(self.conf_group)
 
-        # Download Row
-        self.download_row = Adw.ActionRow()
-        self.download_row.set_title("Download Base ISO")
-        self.download_row.set_subtitle("Debian Live (Standard)")
-        self.conf_group.add(self.download_row)
+        # Download Group
+        self.dl_group = Adw.PreferencesGroup()
+        self.dl_group.set_title("Debian Live ISO")
+        self.dl_group.set_description("Download the latest standard Debian Live ISO.")
+        self.pref_page.add(self.dl_group)
+
+        self.dl_row = Adw.ActionRow()
+        self.dl_row.set_title("Download ISO")
+        self.dl_group.add(self.dl_row)
         
-        self.download_btn = Gtk.Button(label="Download")
-        self.download_btn.set_valign(Gtk.Align.CENTER)
-        self.download_btn.connect("clicked", self.on_download_clicked)
-        self.download_row.add_suffix(self.download_btn)
+        self.dl_button = Gtk.Button(label="Download")
+        self.dl_button.set_valign(Gtk.Align.CENTER)
+        self.dl_button.connect("clicked", self.on_download_clicked)
+        self.dl_row.add_suffix(self.dl_button)
 
         # ISO Selection Row
         self.iso_row = Adw.ActionRow()
         self.iso_row.set_title("Select ISO Image")
         self.iso_row.set_subtitle("The .iso file to flash")
-        self.conf_group.add(self.iso_row)
+        self.pref_page.add(self.iso_row)
 
         self.file_chooser_btn = Gtk.Button(icon_name="folder-open-symbolic")
         self.file_chooser_btn.set_valign(Gtk.Align.CENTER)
@@ -58,19 +65,22 @@ class IsoPage(Adw.PreferencesPage):
             self.selected_iso_path = default_dl
             self.iso_path_label.set_text(DEFAULT_ISO_NAME)
 
-        # Destination Drive Row
-        self.dest_row = Adw.ActionRow()
-        self.dest_row.set_title("Target USB Drive")
-        self.dest_row.set_subtitle("WARNING: Will be wiped!")
-        self.conf_group.add(self.dest_row)
-
-        self.dest_dropdown = Gtk.DropDown()
-        self.dest_dropdown.set_valign(Gtk.Align.CENTER)
-        self.dest_row.add_suffix(self.dest_dropdown)
+        # Target Group
+        self.target_group = Adw.PreferencesGroup()
+        self.target_group.set_title("Target USB Drive")
+        self.pref_page.add(self.target_group)
+        
+        self.target_row = Adw.ActionRow()
+        self.target_row.set_title("Select USB Drive")
+        self.target_group.add(self.target_row)
+        
+        self.target_dropdown = Gtk.DropDown()
+        self.target_dropdown.set_valign(Gtk.Align.CENTER)
+        self.target_row.add_suffix(self.target_dropdown)
 
         # Action Group
         self.action_group = Adw.PreferencesGroup()
-        self.add(self.action_group)
+        self.pref_page.add(self.action_group)
 
         # Create Button
         self.create_btn = Gtk.Button(label="Create Recovery Drive")
@@ -81,9 +91,16 @@ class IsoPage(Adw.PreferencesPage):
         self.create_btn.set_halign(Gtk.Align.CENTER)
         self.action_group.add(self.create_btn)
 
+        # Status Label
         self.status_label = Gtk.Label(label="Ready")
         self.status_label.set_margin_top(10)
         self.action_group.add(self.status_label)
+
+        self.icon_image = Gtk.Image.new_from_icon_name("klon-usb")
+        self.icon_image.set_pixel_size(128)
+        self.icon_image.set_margin_bottom(20)
+        self.icon_image.set_valign(Gtk.Align.END)
+        self.append(self.icon_image)
 
         self.refresh_drives()
 

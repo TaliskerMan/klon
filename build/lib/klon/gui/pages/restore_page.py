@@ -7,7 +7,7 @@ import threading
 from ...backend.drives import list_drives
 from ...backend.clone import restore_from_image
 
-class RestorePage(Adw.PreferencesPage):
+class RestorePage(Gtk.Box):
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.window = window
@@ -18,20 +18,28 @@ class RestorePage(Adw.PreferencesPage):
         # Configuration Group
         self.conf_group = Adw.PreferencesGroup()
         self.conf_group.set_title("Restore Configuration")
-        self.conf_group.set_description("Restore a disk image to a drive. WARN: Overwrites the drive.")
-        self.add(self.conf_group)
 
-        # Source File Row
+        self.pref_page = Adw.PreferencesPage()
+        self.scrolled = Gtk.ScrolledWindow()
+        self.scrolled.set_child(self.pref_page)
+        self.scrolled.set_vexpand(True)
+        self.append(self.scrolled)
+
+        # Source Image Group
+        self.source_group = Adw.PreferencesGroup()
+        self.source_group.set_title("Source Image")
+        self.source_group.set_description("The .img file to restore")
+        self.pref_page.add(self.source_group)
+
         self.source_row = Adw.ActionRow()
-        self.source_row.set_title("Source Image")
-        self.source_row.set_subtitle("The .img file to restore")
-        self.conf_group.add(self.source_row)
-
-        self.file_chooser_btn = Gtk.Button(icon_name="folder-open-symbolic")
-        self.file_chooser_btn.set_valign(Gtk.Align.CENTER)
-        self.file_chooser_btn.connect("clicked", self.on_file_chooser_clicked)
-        self.source_row.add_suffix(self.file_chooser_btn)
+        self.source_row.set_title("Select Image File")
+        self.source_group.add(self.source_row)
         
+        self.source_button = Gtk.Button(icon_name="document-open-symbolic")
+        self.source_button.set_valign(Gtk.Align.CENTER)
+        self.source_button.connect("clicked", self.on_file_chooser_clicked)
+        self.source_row.add_suffix(self.source_button)
+
         self.source_path_label = Gtk.Label(label="No file selected")
         self.source_path_label.add_css_class("dim-label")
         self.source_path_label.set_valign(Gtk.Align.CENTER)
@@ -40,11 +48,15 @@ class RestorePage(Adw.PreferencesPage):
 
         self.selected_file_path = None
 
-        # Destination Drive Row
+        # Dest Drive Group
+        self.dest_group = Adw.PreferencesGroup()
+        self.dest_group.set_title("Destination Drive")
+        self.dest_group.set_description("The drive to be overwritten. WARN: All data will be lost!")
+        self.pref_page.add(self.dest_group)
+
         self.dest_row = Adw.ActionRow()
-        self.dest_row.set_title("Destination Drive")
-        self.dest_row.set_subtitle("The drive to be overwritten")
-        self.conf_group.add(self.dest_row)
+        self.dest_row.set_title("Drive to Restore To")
+        self.dest_group.add(self.dest_row)
 
         self.dest_dropdown = Gtk.DropDown()
         self.dest_dropdown.set_valign(Gtk.Align.CENTER)
@@ -52,7 +64,7 @@ class RestorePage(Adw.PreferencesPage):
 
         # Action Group
         self.action_group = Adw.PreferencesGroup()
-        self.add(self.action_group)
+        self.pref_page.add(self.action_group)
 
         # Restore Button
         self.restore_btn = Gtk.Button(label="Start Restore")
@@ -63,9 +75,16 @@ class RestorePage(Adw.PreferencesPage):
         self.restore_btn.set_halign(Gtk.Align.CENTER)
         self.action_group.add(self.restore_btn)
 
+        # Status Label
         self.status_label = Gtk.Label(label="Ready")
         self.status_label.set_margin_top(10)
         self.action_group.add(self.status_label)
+
+        self.icon_image = Gtk.Image.new_from_icon_name("klon-restore")
+        self.icon_image.set_pixel_size(128)
+        self.icon_image.set_margin_bottom(20)
+        self.icon_image.set_valign(Gtk.Align.END)
+        self.append(self.icon_image)
 
         self.refresh_drives()
 
