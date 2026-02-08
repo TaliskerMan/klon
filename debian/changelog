@@ -1,3 +1,9 @@
+klon (0.2.4-1) noble; urgency=medium
+
+  * New release 0.2.4
+
+ -- Free Code <freecode@taboo.lan>  Sun, 08 Feb 2026 14:49:34 -0600
+
 klon (0.2.3-1) unstable; urgency=medium
 
   * Fix AttributeError in IsoPage (target_dropdown vs dest_dropdown).
