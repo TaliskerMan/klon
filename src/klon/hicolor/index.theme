@@ -1,0 +1,10 @@
+[Icon Theme]
+Name=Hicolor
+Comment=Fallback icon theme
+Hidden=true
+Directories=512x512/apps
+
+[512x512/apps]
+Size=512
+Context=Applications
+Type=Fixed

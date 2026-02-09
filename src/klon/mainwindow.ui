@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="adw" version="1.0"/>
+
+  <template class="MainWindow" parent="AdwApplicationWindow">
+    <property name="title">Klon</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwViewSwitcherTitle">
+                <property name="stack">view_stack</property>
+              </object>
+            </property>
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="menu-model">main_menu</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwViewStack" id="view_stack">
+            <property name="vexpand">True</property>
+            <!-- Pages will be added programmatically/dynamically, avoiding placeholders since we are now using real templates -->
+            <!-- But to keep titles/icons for view switcher, we need pages. Using placeholders is fine if we replace them or just add to stack. 
+                 Actually, MainWindow logic ADDS the pages. So we don't need placeholders here if we add them in code.
+                 BUT current MainWindow init adds titled pages. 
+                 So the stack can be empty here. -->
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+
+  <menu id="main_menu">
+    <section>
+      <item>
+        <attribute name="label">About Klon</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

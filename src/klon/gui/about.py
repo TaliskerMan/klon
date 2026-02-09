@@ -23,7 +23,21 @@ def get_version():
 def show_about_dialog(parent):
     win = Adw.AboutWindow(transient_for=parent)
     win.set_application_name("Klon")
-    win.set_application_icon("com.taliskerman.klon")
+    try:
+        texture = Gdk.Texture.new_from_resource("/com/taliskerman/klon/hicolor/512x512/apps/com.taliskerman.klon.png")
+        # Ensure Adwaita version supports this (introduced in 1.2, but maybe earlier as paintable?)
+        # Adw 1.0 might only have application-icon.
+        # Let's try setting property directly if method is missing?
+        # Safe bet: try attribute.
+        if hasattr(win, "set_application_logo"):
+             win.set_application_logo(texture)
+        else:
+             # Fallback: resource path sometimes works as icon name in older GTK?
+             win.set_application_icon("com.taliskerman.klon") 
+    except Exception as e:
+        print(f"Failed to set logo: {e}")
+        win.set_application_icon("com.taliskerman.klon")
+    
     win.set_developer_name("Chuck Talk")
     win.set_version(get_version())
     win.set_copyright("© 2026 Chuck Talk")

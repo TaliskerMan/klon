@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/taliskerman/klon">
+    <file compressed="true">mainwindow.ui</file>
+    <file compressed="true">clone_page.ui</file>
+    <file compressed="true">backup_page.ui</file>
+    <file compressed="true">restore_page.ui</file>
+    <file compressed="true">iso_page.ui</file>
+    <file>style.css</file>
+    <file>hicolor/index.theme</file>
+    <file>hicolor/512x512/apps/com.taliskerman.klon.png</file>
+    <file>hicolor/512x512/apps/klon-backup.png</file>
+    <file>hicolor/512x512/apps/klon-clone.png</file>
+    <file>hicolor/512x512/apps/klon-issue.png</file>
+    <file>hicolor/512x512/apps/klon-restore.png</file>
+    <file>hicolor/512x512/apps/klon-usb.png</file>
+    <file>hicolor/512x512/apps/klon-website.png</file>
+  </gresource>
+</gresources>

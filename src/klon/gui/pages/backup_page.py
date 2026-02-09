@@ -7,75 +7,23 @@ import threading
 from ...backend.drives import list_drives
 from ...backend.clone import backup_to_image
 
+@Gtk.Template(resource_path='/com/taliskerman/klon/backup_page.ui')
 class BackupPage(Gtk.Box):
+    __gtype_name__ = 'BackupPage'
+
+    backup_source_dropdown = Gtk.Template.Child()
+    backup_dest_button = Gtk.Template.Child()
+    backup_dest_path_label = Gtk.Template.Child()
+    backup_btn = Gtk.Template.Child()
+    backup_status_label = Gtk.Template.Child()
+
     def __init__(self, window, **kwargs):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
+        super().__init__(**kwargs)
         self.window = window
-        
-        self.pref_page = Adw.PreferencesPage()
-        self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.set_child(self.pref_page)
-        self.scrolled.set_vexpand(True)
-        self.append(self.scrolled)
-
-        # Source Selection
-        self.source_group = Adw.PreferencesGroup()
-        self.source_group.set_title("Source")
-        self.pref_page.add(self.source_group)
-        
-        self.source_row = Adw.ActionRow()
-        self.source_row.set_title("Drive to Backup")
-        self.source_group.add(self.source_row)
-        
-        self.source_dropdown = Gtk.DropDown()
-        self.source_dropdown.set_valign(Gtk.Align.CENTER)
-        self.source_row.add_suffix(self.source_dropdown)
-
-        # Dest Selection
-        self.dest_group = Adw.PreferencesGroup()
-        self.dest_group.set_title("Destination Image")
-        self.pref_page.add(self.dest_group)
-        
-        self.dest_row = Adw.ActionRow()
-        self.dest_row.set_title("Select File Location")
-        self.dest_group.add(self.dest_row)
-        
-        self.dest_button = Gtk.Button(icon_name="document-open-symbolic")
-        self.dest_button.set_valign(Gtk.Align.CENTER)
-        self.dest_button.connect("clicked", self.on_file_chooser_clicked)
-        self.dest_row.add_suffix(self.dest_button)
-        
-        self.dest_path_label = Gtk.Label(label="No file selected")
-        self.dest_path_label.add_css_class("dim-label")
-        self.dest_path_label.set_valign(Gtk.Align.CENTER)
-        self.dest_path_label.set_margin_end(10)
-        self.dest_row.add_suffix(self.dest_path_label)
-
         self.selected_file_path = None
 
-        # Action Group
-        self.action_group = Adw.PreferencesGroup()
-        self.pref_page.add(self.action_group)
-
-        # Backup Button
-        self.backup_btn = Gtk.Button(label="Start Backup")
-        self.backup_btn.add_css_class("suggested-action")
-        self.backup_btn.add_css_class("pill")
+        self.backup_dest_button.connect("clicked", self.on_file_chooser_clicked)
         self.backup_btn.connect("clicked", self.on_backup_clicked)
-        self.backup_btn.set_margin_top(20)
-        self.backup_btn.set_halign(Gtk.Align.CENTER)
-        self.action_group.add(self.backup_btn)
-
-        # Status Label
-        self.status_label = Gtk.Label(label="Ready")
-        self.status_label.set_margin_top(10)
-        self.action_group.add(self.status_label)
-
-        self.icon_image = Gtk.Image.new_from_icon_name("klon-backup")
-        self.icon_image.set_pixel_size(128)
-        self.icon_image.set_margin_bottom(20)
-        self.icon_image.set_valign(Gtk.Align.END)
-        self.append(self.icon_image)
 
         self.refresh_drives()
 
@@ -83,7 +31,7 @@ class BackupPage(Gtk.Box):
         self.drives = list_drives()
         drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
         self.source_model = Gtk.StringList.new(drive_strings)
-        self.source_dropdown.set_model(self.source_model)
+        self.backup_source_dropdown.set_model(self.source_model)
 
     def on_file_chooser_clicked(self, btn):
         dialog = Gtk.FileChooserNative(
@@ -101,11 +49,11 @@ class BackupPage(Gtk.Box):
         if response == Gtk.ResponseType.ACCEPT:
             file = dialog.get_file()
             self.selected_file_path = file.get_path()
-            self.dest_path_label.set_text(file.get_basename())
+            self.backup_dest_path_label.set_text(file.get_basename())
         dialog.destroy()
 
     def on_backup_clicked(self, btn):
-        source_idx = self.source_dropdown.get_selected()
+        source_idx = self.backup_source_dropdown.get_selected()
         if source_idx == Gtk.INVALID_LIST_POSITION:
             self.show_error("Please select a source drive.")
             return
@@ -133,7 +81,7 @@ class BackupPage(Gtk.Box):
 
     def start_backup(self, source_path):
         self.backup_btn.set_sensitive(False)
-        self.status_label.set_text("Backing up...")
+        self.backup_status_label.set_text("Backing up...")
         
         # In real world, we need root. The backend wrapper uses pkexec.
         thread = threading.Thread(target=self._run_backup, args=(source_path, self.selected_file_path))
@@ -148,15 +96,15 @@ class BackupPage(Gtk.Box):
             GLib.idle_add(self._finished, False, str(e))
 
     def _update_progress(self, line):
-        GLib.idle_add(self.status_label.set_text, line)
+        GLib.idle_add(self.backup_status_label.set_text, line)
 
     def _finished(self, success, error_msg):
         self.backup_btn.set_sensitive(True)
         if success:
-            self.status_label.set_text("Backup Complete!")
+            self.backup_status_label.set_text("Backup Complete!")
             self.show_success(f"Backup saved to {self.selected_file_path}")
         else:
-            self.status_label.set_text("Backup Failed")
+            self.backup_status_label.set_text("Backup Failed")
             self.show_error(str(error_msg))
 
     def show_error(self, msg):

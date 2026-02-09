@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="adw" version="1.0"/>
+
+  <template class="BackupPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="vexpand">True</property>
+        <property name="child">
+          <object class="AdwPreferencesPage">
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title">Source</property>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Drive to Backup</property>
+                    <child>
+                      <object class="GtkDropDown" id="backup_source_dropdown">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title">Destination Image</property>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Select File Location</property>
+                    <child>
+                      <object class="GtkButton" id="backup_dest_button">
+                        <property name="icon-name">document-open-symbolic</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="backup_dest_path_label">
+                        <property name="label">No file selected</property>
+                        <property name="valign">center</property>
+                        <property name="margin-end">10</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton" id="backup_btn">
+                    <property name="label">Start Backup</property>
+                    <property name="halign">center</property>
+                    <property name="margin-top">20</property>
+                    <style>
+                      <class name="suggested-action"/>
+                      <class name="pill"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="backup_status_label">
+                    <property name="label">Ready</property>
+                    <property name="margin-top">12</property>
+                    <style>
+                      <class name="status-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImage">
+        <property name="resource">/com/taliskerman/klon/hicolor/512x512/apps/klon-backup.png</property>
+        <property name="pixel-size">200</property>
+        <property name="margin-bottom">20</property>
+        <property name="valign">end</property>
+      </object>
+    </child>
+  </template>
+</interface>

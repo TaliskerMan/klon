@@ -8,105 +8,31 @@ import os
 from ...backend.drives import list_drives
 from ...backend.iso import download_iso, flash_iso_and_setup_persistence, DEFAULT_ISO_URL, DEFAULT_ISO_NAME
 
+@Gtk.Template(resource_path='/com/taliskerman/klon/iso_page.ui')
 class IsoPage(Gtk.Box):
+    __gtype_name__ = 'IsoPage'
+
+    iso_dl_button = Gtk.Template.Child()
+    iso_file_btn = Gtk.Template.Child()
+    iso_path_label = Gtk.Template.Child()
+    iso_target_dropdown = Gtk.Template.Child()
+    iso_create_btn = Gtk.Template.Child()
+    iso_status_label = Gtk.Template.Child()
+
     def __init__(self, window, **kwargs):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
+        super().__init__(**kwargs)
         self.window = window
-        
-        self.pref_page = Adw.PreferencesPage()
-        self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.set_child(self.pref_page)
-        self.scrolled.set_vexpand(True)
-        self.append(self.scrolled)
-
-        # Configuration Group
-        # self.conf_group = Adw.PreferencesGroup()
-        # self.conf_group.set_title("Create Bootable Media")
-        # self.conf_group.set_description("Create a bootable USB drive to run Klon for bare-metal restoration.")
-        # self.add(self.conf_group)
-
-        # Download Group
-        self.dl_group = Adw.PreferencesGroup()
-        self.dl_group.set_title("Debian Live ISO")
-        self.dl_group.set_description("Download the latest standard Debian Live ISO.")
-        self.pref_page.add(self.dl_group)
-
-        self.dl_row = Adw.ActionRow()
-        self.dl_row.set_title("Download ISO")
-        self.dl_group.add(self.dl_row)
-        
-        self.dl_button = Gtk.Button(label="Download")
-        self.dl_button.set_valign(Gtk.Align.CENTER)
-        self.dl_button.connect("clicked", self.on_download_clicked)
-        self.dl_row.add_suffix(self.dl_button)
-
-        # ISO Selection Group
-        self.iso_group = Adw.PreferencesGroup()
-        self.iso_group.set_title("ISO Image")
-        self.iso_group.set_description("Select the .iso file to flash.")
-        self.pref_page.add(self.iso_group)
-
-        # ISO Selection Row
-        self.iso_row = Adw.ActionRow()
-        self.iso_row.set_title("Select ISO Image")
-        self.iso_row.set_subtitle("The .iso file to flash")
-        self.iso_group.add(self.iso_row)
-
-        self.file_chooser_btn = Gtk.Button(icon_name="folder-open-symbolic")
-        self.file_chooser_btn.set_valign(Gtk.Align.CENTER)
-        self.file_chooser_btn.connect("clicked", self.on_file_chooser_clicked)
-        self.iso_row.add_suffix(self.file_chooser_btn)
-        
-        self.iso_path_label = Gtk.Label(label="No ISO selected")
-        self.iso_path_label.add_css_class("dim-label")
-        self.iso_path_label.set_valign(Gtk.Align.CENTER)
-        self.iso_path_label.set_margin_end(10)
-        self.iso_row.add_suffix(self.iso_path_label)
-
         self.selected_iso_path = None
-        
+
+        self.iso_dl_button.connect("clicked", self.on_download_clicked)
+        self.iso_file_btn.connect("clicked", self.on_file_chooser_clicked)
+        self.iso_create_btn.connect("clicked", self.on_create_clicked)
+
         # Check standard location
         default_dl = os.path.expanduser(f"~/Downloads/{DEFAULT_ISO_NAME}")
         if os.path.exists(default_dl):
             self.selected_iso_path = default_dl
             self.iso_path_label.set_text(DEFAULT_ISO_NAME)
-
-        # Target Group
-        self.target_group = Adw.PreferencesGroup()
-        self.target_group.set_title("Target USB Drive")
-        self.pref_page.add(self.target_group)
-        
-        self.target_row = Adw.ActionRow()
-        self.target_row.set_title("Select USB Drive")
-        self.target_group.add(self.target_row)
-        
-        self.target_dropdown = Gtk.DropDown()
-        self.target_dropdown.set_valign(Gtk.Align.CENTER)
-        self.target_row.add_suffix(self.target_dropdown)
-
-        # Action Group
-        self.action_group = Adw.PreferencesGroup()
-        self.pref_page.add(self.action_group)
-
-        # Create Button
-        self.create_btn = Gtk.Button(label="Create Recovery Drive")
-        self.create_btn.add_css_class("destructive-action")
-        self.create_btn.add_css_class("pill")
-        self.create_btn.connect("clicked", self.on_create_clicked)
-        self.create_btn.set_margin_top(20)
-        self.create_btn.set_halign(Gtk.Align.CENTER)
-        self.action_group.add(self.create_btn)
-
-        # Status Label
-        self.status_label = Gtk.Label(label="Ready")
-        self.status_label.set_margin_top(10)
-        self.action_group.add(self.status_label)
-
-        self.icon_image = Gtk.Image.new_from_icon_name("klon-usb")
-        self.icon_image.set_pixel_size(128)
-        self.icon_image.set_margin_bottom(20)
-        self.icon_image.set_valign(Gtk.Align.END)
-        self.append(self.icon_image)
 
         self.refresh_drives()
 
@@ -114,11 +40,11 @@ class IsoPage(Gtk.Box):
         self.drives = list_drives()
         drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
         self.dest_model = Gtk.StringList.new(drive_strings)
-        self.target_dropdown.set_model(self.dest_model)
+        self.iso_target_dropdown.set_model(self.dest_model)
 
     def on_download_clicked(self, btn):
-        self.download_btn.set_sensitive(False)
-        self.status_label.set_text("Downloading ISO...")
+        self.iso_dl_button.set_sensitive(False)
+        self.iso_status_label.set_text("Downloading ISO...")
         target_path = os.path.expanduser(f"~/Downloads/{DEFAULT_ISO_NAME}")
         
         thread = threading.Thread(target=self._run_download, args=(DEFAULT_ISO_URL, target_path))
@@ -130,16 +56,16 @@ class IsoPage(Gtk.Box):
         GLib.idle_add(self._dl_finished, success, path)
 
     def _update_dl_progress(self, percent, msg):
-        GLib.idle_add(self.status_label.set_text, msg)
+        GLib.idle_add(self.iso_status_label.set_text, msg)
 
     def _dl_finished(self, success, path):
-        self.download_btn.set_sensitive(True)
+        self.iso_dl_button.set_sensitive(True)
         if success:
-            self.status_label.set_text("Download Complete!")
+            self.iso_status_label.set_text("Download Complete!")
             self.selected_iso_path = path
             self.iso_path_label.set_text(os.path.basename(path))
         else:
-            self.status_label.set_text("Download Failed")
+            self.iso_status_label.set_text("Download Failed")
 
     def on_file_chooser_clicked(self, btn):
         dialog = Gtk.FileChooserNative(
@@ -160,7 +86,7 @@ class IsoPage(Gtk.Box):
         dialog.destroy()
 
     def on_create_clicked(self, btn):
-        dest_idx = self.target_dropdown.get_selected()
+        dest_idx = self.iso_target_dropdown.get_selected()
         if dest_idx == Gtk.INVALID_LIST_POSITION:
             self.show_error("Please select a target USB drive.")
             return
@@ -187,8 +113,8 @@ class IsoPage(Gtk.Box):
             self.start_flash(dest_path)
 
     def start_flash(self, dest_path):
-        self.create_btn.set_sensitive(False)
-        self.status_label.set_text("Flashing...")
+        self.iso_create_btn.set_sensitive(False)
+        self.iso_status_label.set_text("Flashing...")
         
         thread = threading.Thread(target=self._run_flash, args=(self.selected_iso_path, dest_path))
         thread.daemon = True
@@ -202,15 +128,15 @@ class IsoPage(Gtk.Box):
             GLib.idle_add(self._finished, False, str(e))
 
     def _update_progress(self, percent, msg):
-        GLib.idle_add(self.status_label.set_text, msg)
+        GLib.idle_add(self.iso_status_label.set_text, msg)
 
     def _finished(self, success, error_msg):
-        self.create_btn.set_sensitive(True)
+        self.iso_create_btn.set_sensitive(True)
         if success:
-            self.status_label.set_text("Recovery Drive Created!")
+            self.iso_status_label.set_text("Recovery Drive Created!")
             self.show_success("ISO Flashed Successfully.\n\nNote: Persistence partition creation is experimental/manual in this version.")
         else:
-            self.status_label.set_text("Flash Failed")
+            self.iso_status_label.set_text("Flash Failed")
             self.show_error(str(error_msg))
 
     def show_error(self, msg):

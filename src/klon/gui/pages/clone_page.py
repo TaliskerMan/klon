@@ -7,70 +7,19 @@ import threading
 from ...backend.drives import list_drives
 from ...backend.clone import clone_drive
 
+@Gtk.Template(resource_path='/com/taliskerman/klon/clone_page.ui')
 class ClonePage(Gtk.Box):
+    __gtype_name__ = 'ClonePage'
+
+    clone_source_dropdown = Gtk.Template.Child()
+    clone_dest_dropdown = Gtk.Template.Child()
+    clone_button = Gtk.Template.Child()
+    clone_status_label = Gtk.Template.Child()
+
     def __init__(self, window, **kwargs):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL, **kwargs)
+        super().__init__(**kwargs)
         self.window = window
-
-        # Internal Preferences Page for controls
-        self.pref_page = Adw.PreferencesPage()
-        
-        # Scrolled Window for Pref Page (so it handles overflow if small)
-        self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.set_child(self.pref_page)
-        self.scrolled.set_vexpand(True) 
-        self.append(self.scrolled) # Add to Box
-
-        # Drive Selection Group
-        self.drive_group = Adw.PreferencesGroup()
-        self.drive_group.set_title("Cloning Configuration")
-        self.drive_group.set_description("Select source and destination drives.")
-        self.pref_page.add(self.drive_group)
-
-        # Source Drive Row
-        self.source_row = Adw.ActionRow()
-        self.source_row.set_title("Source Drive")
-        self.source_row.set_subtitle("The drive to clone from")
-        self.drive_group.add(self.source_row)
-
-        self.source_dropdown = Gtk.DropDown()
-        self.source_dropdown.set_valign(Gtk.Align.CENTER)
-        self.source_row.add_suffix(self.source_dropdown)
-
-        # Destination Drive Row
-        self.dest_row = Adw.ActionRow()
-        self.dest_row.set_title("Destination Drive")
-        self.dest_row.set_subtitle("The drive to be overwritten")
-        self.drive_group.add(self.dest_row)
-
-        self.dest_dropdown = Gtk.DropDown()
-        self.dest_dropdown.set_valign(Gtk.Align.CENTER)
-        self.dest_row.add_suffix(self.dest_dropdown)
-
-        # Action Group
-        self.action_group = Adw.PreferencesGroup()
-        self.pref_page.add(self.action_group)
-
-        # Clone Button
-        self.clone_button = Gtk.Button(label="Start Cloning")
-        self.clone_button.add_css_class("suggested-action")
-        self.clone_button.add_css_class("pill")
         self.clone_button.connect("clicked", self.on_clone_clicked)
-        self.clone_button.set_margin_top(20)
-        self.clone_button.set_halign(Gtk.Align.CENTER)
-        self.action_group.add(self.clone_button)
-        
-        # Status Label
-        self.status_label = Gtk.Label(label="Ready")
-        self.status_label.set_margin_top(10)
-        self.action_group.add(self.status_label)
-        
-        # Bottom Branding Icon
-        self.icon_image = Gtk.Image.new_from_icon_name("klon-clone")
-        self.icon_image.set_pixel_size(128)
-        self.icon_image.set_margin_bottom(20)
-        self.icon_image.set_valign(Gtk.Align.END)
-        self.append(self.icon_image)
 
         # Populate drives
         self.refresh_drives()
@@ -82,12 +31,12 @@ class ClonePage(Gtk.Box):
         self.source_model = Gtk.StringList.new(drive_strings)
         self.dest_model = Gtk.StringList.new(drive_strings)
         
-        self.source_dropdown.set_model(self.source_model)
-        self.dest_dropdown.set_model(self.dest_model)
+        self.clone_source_dropdown.set_model(self.source_model)
+        self.clone_dest_dropdown.set_model(self.dest_model)
 
     def on_clone_clicked(self, button):
-        source_idx = self.source_dropdown.get_selected()
-        dest_idx = self.dest_dropdown.get_selected()
+        source_idx = self.clone_source_dropdown.get_selected()
+        dest_idx = self.clone_dest_dropdown.get_selected()
         
         if source_idx == Gtk.INVALID_LIST_POSITION or dest_idx == Gtk.INVALID_LIST_POSITION:
             self.show_error("Please select both drives.")
@@ -118,7 +67,7 @@ class ClonePage(Gtk.Box):
 
     def start_cloning(self, source, dest):
         self.clone_button.set_sensitive(False)
-        self.status_label.set_text("Cloning in progress...")
+        self.clone_status_label.set_text("Cloning in progress...")
         
         thread = threading.Thread(target=self._run_clone, args=(source.path, dest.path))
         thread.daemon = True
@@ -132,15 +81,15 @@ class ClonePage(Gtk.Box):
             GLib.idle_add(self._clone_finished, False, str(e))
 
     def _update_progress(self, status_line):
-        GLib.idle_add(self.status_label.set_text, status_line)
+        GLib.idle_add(self.clone_status_label.set_text, status_line)
 
     def _clone_finished(self, success, error_msg):
         self.clone_button.set_sensitive(True)
         if success:
-            self.status_label.set_text("Cloning Complete!")
+            self.clone_status_label.set_text("Cloning Complete!")
             self.show_success("Drive cloned successfully.")
         else:
-            self.status_label.set_text("Cloning Failed")
+            self.clone_status_label.set_text("Cloning Failed")
             self.show_error(f"Error: {error_msg}")
 
     def show_error(self, message):

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="adw" version="1.0"/>
+
+  <template class="ClonePage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="vexpand">True</property>
+        <property name="child">
+          <object class="AdwPreferencesPage">
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title">Cloning Configuration</property>
+                <property name="description">Select source and destination drives.</property>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Source Drive</property>
+                    <property name="subtitle">The drive to clone from</property>
+                    <child>
+                      <object class="GtkDropDown" id="clone_source_dropdown">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Destination Drive</property>
+                    <property name="subtitle">The drive to be overwritten</property>
+                    <child>
+                      <object class="GtkDropDown" id="clone_dest_dropdown">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton" id="clone_button">
+                    <property name="label">Start Cloning</property>
+                    <property name="halign">center</property>
+                    <property name="margin-top">20</property>
+                    <style>
+                      <class name="suggested-action"/>
+                      <class name="pill"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="clone_status_label">
+                    <property name="label">Ready</property>
+                    <property name="margin-top">12</property>
+                    <style>
+                      <class name="status-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImage">
+        <property name="resource">/com/taliskerman/klon/hicolor/512x512/apps/klon-clone.png</property>
+        <property name="pixel-size">200</property>
+        <property name="margin-bottom">20</property>
+        <property name="valign">end</property>
+      </object>
+    </child>
+  </template>
+</interface>
