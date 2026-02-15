@@ -1,0 +1,53 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Sun, 08 Feb 2026 14:49:34 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.2.4-1
+Distribution: noble
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Free Code <freecode@taboo.lan>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.2.4-1) noble; urgency=medium
+ .
+   * New release 0.2.4
+Checksums-Sha1:
+ a8d993dd1e352b5cef42887d84920f890ebc451e 1506 klon_0.2.4-1.dsc
+ d72b43cd3995c10adafe2cf19f537fa7c70d8c00 18789628 klon_0.2.4-1.tar.gz
+ 8a4711992e2c51b133795c6c0ad491e61376ef30 1249590 klon_0.2.4-1_all.deb
+ 6f2d31b407816627e711f1df11181b3120413c98 20970 klon_0.2.4-1_amd64.buildinfo
+Checksums-Sha256:
+ 32b46dfb4f43a6bccea57200ef09e68ecbbe8a86ff5e104887d90eba36f42ba6 1506 klon_0.2.4-1.dsc
+ 4d67a3c95ea0a12de6794880a2dc2c731aec3bfaecad24b2beb02cfa9951e324 18789628 klon_0.2.4-1.tar.gz
+ b319d52cf4938686a40f227aecc33d42535bcf1e8c1fd1a1a989670a12fc46df 1249590 klon_0.2.4-1_all.deb
+ d46729deb7d78ea04882b63f4ee374aadd7e345d5088430f2b44d5d4d0a04c8b 20970 klon_0.2.4-1_amd64.buildinfo
+Files:
+ 4a5e3450fe4bd7cef7c5cb92a3abffef 1506 utils optional klon_0.2.4-1.dsc
+ 6edd7636512bf70d9be2dfff594b1425 18789628 utils optional klon_0.2.4-1.tar.gz
+ f0d08661e9a1ab29da0e9647c5dbc29f 1249590 utils optional klon_0.2.4-1_all.deb
+ 64b0a89a555ec539e32766b8310d5eb8 20970 utils optional klon_0.2.4-1_amd64.buildinfo
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJGBAEBCgAwFiEEsv68NE2qkRsKoUTj6GQf69zBdjUFAmmI9v8SHGN3dGFsazFA
+Z21haWwuY29tAAoJEOhkH+vcwXY1pwUQAJZ381WSFwq91a+Lsy8rtkT+Oy9SximI
+hiyygJIf1pEn5i+1Zm1/Pu6kScyM7eyB/hyMlk8VFBDxXhoNvLy3nyW1NbEbM65P
+S2zyVyFTAmWpJp6CQkYmRxQ5jLRoqYU1oW/cXRTO69OmnQ5dKYNy0LpQliZ1skrs
+bGNUj7WBagmIQN+XFA3ZM6TPKsaqUdVj0MK4D+ns1G7RSf0GWToUFJO6Yq7poqFA
+9GrfycQd+vH6E5smUkjDDCOYlrAMzLyLy+fcTKpYhwwQClgu4PAmwyjA2jCCCcmW
+8tqBgs/qV+QC2BbQumJ1Txgusgu50FZH8as9GGUOfYFr2zDPbBoiABqfb/6vc6UG
+hDhCxUAYHufJVtS/G2cvN/mnmvf78eK5iGAwNTD6mjKjhX0AKNce+QqA20nuJ46A
+A2fcK6UJtVdqBGOdg6J0y+F4xwBZlwxk7rpv1OZqdDZlr98661+EMuX06SAV+YPx
+fTn3P6RSQ5L0fKWMVqTrz2KEJ8khMCX34Z+4N0f9b6TEMfv1F6I2SFbvreW/8xsl
+uNjps2fwRlnXRdLwmpFzfXH8E+ffae0VVTh0BP9TQ4aeKL0cLzHiLk/iQ+IsuCP0
+L4O+Sp2jbTpLmhlgGMHq1rdBYfQY+RF0ZGmMPEKt6tYRzT30KSNhznIwWgBusEjo
+IcYcjVpyVtyc
+=2Z3m
+-----END PGP SIGNATURE-----

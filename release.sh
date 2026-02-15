@@ -37,9 +37,14 @@ git push
 echo "Building package..."
 debuild -k"$KEY_ID"
 
-# Locate build artifacts (parent directory)
-DEB_FILE="../${PACKAGE_NAME}_${NEW_VERSION}-1_all.deb"
-CHANGES_FILE="../${PACKAGE_NAME}_${NEW_VERSION}-1_amd64.changes" 
+# Move artifacts to artifacts/
+mkdir -p artifacts
+mv ../${PACKAGE_NAME}_${NEW_VERSION}* artifacts/ 2>/dev/null || true
+mv ../${PACKAGE_NAME}_${CURRENT_VERSION}* artifacts/ 2>/dev/null || true # Cleanup old attempts if any
+
+# Locate build artifacts (in artifacts directory)
+DEB_FILE="artifacts/${PACKAGE_NAME}_${NEW_VERSION}-1_all.deb"
+CHANGES_FILE="artifacts/${PACKAGE_NAME}_${NEW_VERSION}-1_amd64.changes" 
 
 if [ ! -f "$DEB_FILE" ]; then
     echo "Error: DEB file not found at $DEB_FILE"
