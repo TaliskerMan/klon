@@ -1,0 +1,33 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 19:45:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.2.1-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.2.1-1) unstable; urgency=medium
+ .
+   * Fix crash in Restore page (missing pages regression).
+   * Ensure all pages use correct Box layout.
+Checksums-Sha1:
+ 64cf9abd8d9dc14ae7170f2ddfd7d97f9e66d656 598 klon_0.2.1-1.dsc
+ 8db7b69fe90bafad69a8ea446050f839e5ef8958 20460434 klon_0.2.1-1.tar.gz
+ 9d3d9f325b52c028d20dfc3f94409b345f07504c 1242860 klon_0.2.1-1_all.deb
+ 50058e3181a1e3d8a7f723e0ae0e84ebef873dcc 20407 klon_0.2.1-1_amd64.buildinfo
+Checksums-Sha256:
+ 0c2e257a03555246ebca04ed01bd1d7d8d9abd3a61b7b29b37302aa68d06b97e 598 klon_0.2.1-1.dsc
+ 45460433d621320982dc2b6d1dd11fe33060ee192df717db34f6a36fefb8825d 20460434 klon_0.2.1-1.tar.gz
+ 5b8bee75d0c3d4995c263b14777c02790c7ece1fa64d263b5ce480d73c867b6f 1242860 klon_0.2.1-1_all.deb
+ 95800da5def116eb045e09bb0a4567ffe482be0122d3b57b948fb36d056fe6f4 20407 klon_0.2.1-1_amd64.buildinfo
+Files:
+ 0f9bf4ea4593a105fd1a1c9e9f1ea762 598 utils optional klon_0.2.1-1.dsc
+ f90aed03a63bdf64e299145ef1a97e42 20460434 utils optional klon_0.2.1-1.tar.gz
+ 7affe5e16ed751a29b71445c59bef36b 1242860 utils optional klon_0.2.1-1_all.deb
+ da61055fca8d0da8f412b01b50c72ff3 20407 utils optional klon_0.2.1-1_amd64.buildinfo

@@ -1,0 +1,33 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 20:00:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.2.2-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.2.2-1) unstable; urgency=medium
+ .
+   * Fix crash in Recovery USB page (ActionRow directly in Page).
+   * Ensure all tabs load correctly.
+Checksums-Sha1:
+ f7000c48f3a005f4921a2694c166a0f5bc611170 598 klon_0.2.2-1.dsc
+ cdbcff3ea98f4ba12fe5870589a62c32ed82ef8f 21755938 klon_0.2.2-1.tar.gz
+ 359b295594a672feb27ce696c22aa8f9b4a95449 1242894 klon_0.2.2-1_all.deb
+ a4416ab8b6de292bc30cafcae0eeaf945cfda59f 20407 klon_0.2.2-1_amd64.buildinfo
+Checksums-Sha256:
+ 5faeee50f8fe8a1668b2a56c211a8e25dcef0478ae73d6be2e187e2fecc307fe 598 klon_0.2.2-1.dsc
+ f4df400e0c40b6835399ca8f15ee0b4ab021f23f5a60534c99194a31b8c9e930 21755938 klon_0.2.2-1.tar.gz
+ b33ba7066e62ab0ab21da7ecc0c2d3b24c445f44e3cabb0126fe1d307fab0f30 1242894 klon_0.2.2-1_all.deb
+ fb3dcf641a6c07ce1d4a5ce69b235b3e70fc43e096f015ba1ee71e0a08f5e3a4 20407 klon_0.2.2-1_amd64.buildinfo
+Files:
+ e426d0dbe676bc016abfa896271c61af 598 utils optional klon_0.2.2-1.dsc
+ 678fabcb9c307c6747fd4f5fe9649dd5 21755938 utils optional klon_0.2.2-1.tar.gz
+ 8b8f0a42a4b0d5cebff9d9b7fef5cd2d 1242894 utils optional klon_0.2.2-1_all.deb
+ 347c3232ceb8582e148a596b19a90ad7 20407 utils optional klon_0.2.2-1_amd64.buildinfo

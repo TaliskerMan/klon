@@ -1,0 +1,33 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 20:15:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.2.3-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.2.3-1) unstable; urgency=medium
+ .
+   * Fix AttributeError in IsoPage (target_dropdown vs dest_dropdown).
+   * This restores the Recovery USB page functionality.
+Checksums-Sha1:
+ 863c299b352ebbf0d515c0fb3cc0c091099ae6c1 598 klon_0.2.3-1.dsc
+ 4c1310ceb197f7dec2cbbeed950fb5ab7488dcb7 23051269 klon_0.2.3-1.tar.gz
+ d6b2b84e6bae4cddb2612d68784c0c5cd3c00308 1242966 klon_0.2.3-1_all.deb
+ 5373951156673bbb3302bb8cc4af7c6bc2d2abc8 20407 klon_0.2.3-1_amd64.buildinfo
+Checksums-Sha256:
+ 7ca8fbf38107e55ab4625f299acdbe35ce4e5e464dbc3b3a370d65a6e5db4948 598 klon_0.2.3-1.dsc
+ b9e77aa16bb394926218d59b466b8c69e2cb7d365a6e3020d4900fc3a5e205d1 23051269 klon_0.2.3-1.tar.gz
+ 428e5c542aeb7eaa8cf7e0cb7861b3949358dd6e65a560b753092df1ba95fd5e 1242966 klon_0.2.3-1_all.deb
+ 8f9b73d98771878695edace079fe56b6417c80d3a2b8553fb3b02832e310d33e 20407 klon_0.2.3-1_amd64.buildinfo
+Files:
+ 2a337ffc00b837691c8e2340df195491 598 utils optional klon_0.2.3-1.dsc
+ e884b33c5a9aa832ac795c4fdbe340c3 23051269 utils optional klon_0.2.3-1.tar.gz
+ 469202c071fb55204e714fdf7034b854 1242966 utils optional klon_0.2.3-1_all.deb
+ f1854db98af0d37457c0ac0b9b7d9dbd 20407 utils optional klon_0.2.3-1_amd64.buildinfo

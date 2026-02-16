@@ -1,0 +1,34 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 19:00:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.1.8-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.1.8-1) unstable; urgency=medium
+ .
+   * Fix missing icons (add postinst to update icon cache).
+   * Fix About links (chucktalk.com, mailto) and version display.
+   * Add local License viewer dialog.
+Checksums-Sha1:
+ 06414651b8890f8d848479e2525cff5cf3d61819 598 klon_0.1.8-1.dsc
+ 4995aab3cfbd29482d3c7c7c8059409ac04109b3 16057438 klon_0.1.8-1.tar.gz
+ 3859e93310a772d3ed761e4baf97eee805e60468 1242662 klon_0.1.8-1_all.deb
+ 5a06929d5fa2f41c68945cae88d7befbf0b58e8b 20407 klon_0.1.8-1_amd64.buildinfo
+Checksums-Sha256:
+ 00093e28190139b6846d2908c7d904d3f34e7b45c8d732c31942ba439334dff5 598 klon_0.1.8-1.dsc
+ 3612ff18fbe7f2272959954f22dd8237988fdf965158189c9cf62f572d4b3bff 16057438 klon_0.1.8-1.tar.gz
+ ed9ff2df76d0d4a78674c7e8825c0dd7caa8da11d3df8dbdd16cf830da7b8ba1 1242662 klon_0.1.8-1_all.deb
+ 07b2c86547c755a31b96d25cb3113a36b89145621bdbef8164f112a7f0e7beda 20407 klon_0.1.8-1_amd64.buildinfo
+Files:
+ da3b611adc39e727dbb7544382bc1092 598 utils optional klon_0.1.8-1.dsc
+ 60e8cdc7680f89761fb28927eb1a1478 16057438 utils optional klon_0.1.8-1.tar.gz
+ d2e200d915e57b7b0d2ac168a33eb381 1242662 utils optional klon_0.1.8-1_all.deb
+ b194379431d4e06704cfe827a6dad355 20407 utils optional klon_0.1.8-1_amd64.buildinfo

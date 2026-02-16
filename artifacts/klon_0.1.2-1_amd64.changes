@@ -1,0 +1,32 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 14:00:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.1.2-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.1.2-1) unstable; urgency=medium
+ .
+   * Fix critical startup crash (GApplication chaining).
+Checksums-Sha1:
+ b8d3ab10874f2139a324c86e6062ccc6c2b717b6 592 klon_0.1.2-1.dsc
+ 9b99c20feb1e7c0e4008ec5786a3e7477dc4c911 727740 klon_0.1.2-1.tar.gz
+ 3703af598cbcc31dbc78c246e3605fdddd469282 38140 klon_0.1.2-1_all.deb
+ c97fb4d70078ecf9c76c20d8f20feb01fffe9ee0 20401 klon_0.1.2-1_amd64.buildinfo
+Checksums-Sha256:
+ 8adaed7b4caccec4de6f63cd293cd267aa520578eab87a84a4901bc0b99ecd67 592 klon_0.1.2-1.dsc
+ 34538269098cea3f977a04b9b1a6a226436a287c37e86e673ba1e791cb9f32a8 727740 klon_0.1.2-1.tar.gz
+ 6f047c98566f3b76dc6097d498242313e5f59a00c4fd69c480069f0eab2da572 38140 klon_0.1.2-1_all.deb
+ 9a8c725500eb197949099910d6e8b13f868c255b5ead2b2a26e9800743647300 20401 klon_0.1.2-1_amd64.buildinfo
+Files:
+ de4bd4ca1682f6d24b80d75a3d67583c 592 utils optional klon_0.1.2-1.dsc
+ 598d0c626c5ce8fa1e747b5f5ddd2155 727740 utils optional klon_0.1.2-1.tar.gz
+ ea0a502146f51e2a6d3e396b35041cbd 38140 utils optional klon_0.1.2-1_all.deb
+ e4e503a9fd28c5172fbaeebc776c65e7 20401 utils optional klon_0.1.2-1_amd64.buildinfo

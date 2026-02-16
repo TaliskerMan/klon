@@ -1,0 +1,32 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 18:00:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.1.7-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.1.7-1) unstable; urgency=medium
+ .
+   * Custom About Page with large PNG action buttons for Website and Issues.
+Checksums-Sha1:
+ b33ffad1b5c8547e9366cf849ad87b45d332d5a8 598 klon_0.1.7-1.dsc
+ 3ef6a08db7f28037e993c8253ad8c0eddce4fc8c 13512232 klon_0.1.7-1.tar.gz
+ c9c689a4bc1de29f48902286e381faf4bd76d661 1242270 klon_0.1.7-1_all.deb
+ 0ad94bdaf1245b454087c3ccdeec3898a1816240 20407 klon_0.1.7-1_amd64.buildinfo
+Checksums-Sha256:
+ dd028e31916f88b5d994eacadceab934bd5a1aa9c28ad95c131e2973c87f0066 598 klon_0.1.7-1.dsc
+ 206c609495eba0199ea50e05806bf15782eaa4f38025b12bc7ce9bfc46cbb4a3 13512232 klon_0.1.7-1.tar.gz
+ 2129265968e2f011567a6bd8de6edad8e7ea249eecf9cac67dfed2ebef0a16dc 1242270 klon_0.1.7-1_all.deb
+ d5ba97265cec3f881a1c6b8cabf1cff2dee340ea05206aab3998d8d85b87a4f7 20407 klon_0.1.7-1_amd64.buildinfo
+Files:
+ cfb681e0dee8846df7e1bb2db38092ce 598 utils optional klon_0.1.7-1.dsc
+ e271e2a7e04cf3d275763ad545673f72 13512232 utils optional klon_0.1.7-1.tar.gz
+ a6feee5e951c73936c092637c612e956 1242270 utils optional klon_0.1.7-1_all.deb
+ 72a9f1f51cce528e7a78098ebb47b052 20407 utils optional klon_0.1.7-1_amd64.buildinfo

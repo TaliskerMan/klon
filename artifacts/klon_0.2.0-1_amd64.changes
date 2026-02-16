@@ -1,0 +1,34 @@
+Format: 1.8
+Date: Wed, 04 Feb 2026 19:30:00 -0600
+Source: klon
+Binary: klon
+Built-For-Profiles: noudeb
+Architecture: source all
+Version: 0.2.0-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Changed-By: Chuck Talk <cwtalk1@gmail.com>
+Description:
+ klon       - System cloning and recovery tool
+Changes:
+ klon (0.2.0-1) unstable; urgency=medium
+ .
+   * UI Redesign: Text-only bold tabs.
+   * Pages now feature large branding icons at the bottom.
+   * Standardized About dialog with native license view.
+Checksums-Sha1:
+ 83ff39cadb4ae243a2ecb1c2eade6c90645d4bdf 598 klon_0.2.0-1.dsc
+ f2b4cbf397773d54099c5c1a591561b777fc4e7f 19157577 klon_0.2.0-1.tar.gz
+ bd2a34a42cf241b5c08e8607aab54e83c022495d 1242798 klon_0.2.0-1_all.deb
+ 329eab1a666aa63c81266a4723ecf7f8996840b5 20407 klon_0.2.0-1_amd64.buildinfo
+Checksums-Sha256:
+ d726b55d66b30d84cc861fbc9c18d77a6ac5df6f969923b7ee2b8e7474168335 598 klon_0.2.0-1.dsc
+ 874258a2a69efe5733b94a62ecf422bfa4b8b35a54400251124f7aa701cda05a 19157577 klon_0.2.0-1.tar.gz
+ 3f6e03454f23bf4d01153dee2c8d34f4ca7460ab262938e1357f99db5903ba17 1242798 klon_0.2.0-1_all.deb
+ f8e61332970c317d3629019dc8f56dd1514154768183dd510ab5f186759a4127 20407 klon_0.2.0-1_amd64.buildinfo
+Files:
+ 8f775bdda433b6e48f38e6d4d81dee79 598 utils optional klon_0.2.0-1.dsc
+ 8f70724cdf893e3e118f89009221efba 19157577 utils optional klon_0.2.0-1.tar.gz
+ 2dd3b2b37705a38eb8a6e94bc1459ca4 1242798 utils optional klon_0.2.0-1_all.deb
+ 96aff4ba94f3ebc026b037e262704e4e 20407 utils optional klon_0.2.0-1_amd64.buildinfo
