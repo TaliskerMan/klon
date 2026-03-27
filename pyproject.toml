@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "klon"
-version = "0.2.4"
+version = "0.2.5"
 description = "A system cloning and recovery tool for Pop!_OS"
 readme = "README.md"
 authors = [
-  { name = "Chuck Talk", email = "cwtalk1@gmail.com" },
+  { name = "Chuck Talk", email = "chuck@nordheim.online" },
 ]
 license = { text = "GPL-3.0-or-later" }
 classifiers = [
