@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "klon"
-version = "0.2.6"
+version = "0.2.7"
 description = "A system cloning and recovery tool for Pop!_OS"
 readme = "README.md"
 authors = [
@@ -29,3 +29,6 @@ klon = "klon.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+klon = ["*.gresource"]
