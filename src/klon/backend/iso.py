@@ -1,4 +1,6 @@
-import subprocess
+import subprocess  # nosec B404
+import shutil
+import logging
 import os
 import requests
 import threading
@@ -29,7 +31,7 @@ def download_iso(url, dest_path, progress_callback=None):
                     
         return True
     except Exception as e:
-        print(f"Download error: {e}")
+        logging.error(f"Download error: {e}")
         return False
 
 def flash_iso_and_setup_persistence(iso_path, device_path, progress_callback=None):
@@ -45,9 +47,14 @@ def flash_iso_and_setup_persistence(iso_path, device_path, progress_callback=Non
 
     # 1. Flash ISO using dd
     # This overwrites the partition table with the ISO's layout (usually Hybrid MBR/GPT)
+    pkexec_path = shutil.which('pkexec')
+    dd_path = shutil.which('dd')
+    if not pkexec_path or not dd_path:
+        raise RuntimeError("Required binaries (pkexec, dd) not found in PATH")
+
     cmd = [
-        'pkexec',
-        'dd',
+        pkexec_path,
+        dd_path,
         f'if={iso_path}',
         f'of={device_path}',
         'bs=4M',
@@ -55,7 +62,7 @@ def flash_iso_and_setup_persistence(iso_path, device_path, progress_callback=Non
         'conv=fsync'
     ]
     
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  # nosec B603
     
     # Monitor dd progress
     while True:
@@ -81,7 +88,11 @@ def flash_iso_and_setup_persistence(iso_path, device_path, progress_callback=Non
     # But for our simple "Backup Storage" use case, we just need a partition "KLON_STORE"
     
     # Reload partition table
-    subprocess.run(['pkexec', 'partprobe', device_path])
+    partprobe_path = shutil.which("partprobe")
+    if partprobe_path:
+        subprocess.run([pkexec_path, partprobe_path, device_path])  # nosec B603
+    else:
+        logging.warning("partprobe not found, skipping partition reload")
     
     # Use fdisk to create a new partition n -> p -> default -> default -> w
     # This is brittle script-wise. 'parted' is better but might complain about overlapping.
@@ -91,11 +102,13 @@ def flash_iso_and_setup_persistence(iso_path, device_path, progress_callback=Non
     # 1. Create partition from end of ISO to end of Disk.
     try:
         # Create partition 3 (usually 1 is iso, 2 is esp)
-        subprocess.run([
-            'pkexec', 'parted', '-s', device_path, 
-            'mkpart', 'primary', 'ext4', '100%', '100%' # This usually fails if start is vague. 
-            # Better strategy: Get ISO size, start part after it.
-        ], check=False)
+        parted_path = shutil.which("parted")
+        if parted_path:
+            subprocess.run([  # nosec B603
+                pkexec_path, parted_path, '-s', device_path, 
+                'mkpart', 'primary', 'ext4', '100%', '100%' # This usually fails if start is vague. 
+                # Better strategy: Get ISO size, start part after it.
+            ], check=False)
         
         # Actually, simpler manual instruction might be safer for V1:
         # "Flash Complete. Please use GParted to add a storage partition."
@@ -107,7 +120,7 @@ def flash_iso_and_setup_persistence(iso_path, device_path, progress_callback=Non
         pass
         
     except Exception as e:
-        print(f"Partitioning error: {e}")
+        logging.error(f"Partitioning error: {e}")
 
     if progress_callback:
         progress_callback(100, "Done!")

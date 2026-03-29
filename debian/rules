@@ -2,3 +2,7 @@
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild
+
+override_dh_auto_build:
+	glib-compile-resources --sourcedir=src/klon --target=src/klon/klon.gresource src/klon/klon.gresource.xml
+	dh_auto_build

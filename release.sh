@@ -2,7 +2,9 @@
 set -e
 
 # Configuration
-KEY_ID="Chuck Talk <cwtalk1@gmail.com>"
+export DEBFULLNAME="Chuck Talk"
+export DEBEMAIL="chuck@nordheim.online"
+KEY_ID="chuck@nordheim.online"
 PACKAGE_NAME="klon"
 
 # check for required commands
@@ -56,8 +58,12 @@ SHA512=$(sha512sum "$DEB_FILE" | awk '{print $1}')
 echo "SHA512: $SHA512"
 echo "$SHA512 $DEB_FILE" > "${DEB_FILE}.sha512"
 
+# Generate Detached Signature and Export Pubkey
+gpg --armor --detach-sign --default-key "$KEY_ID" "$DEB_FILE"
+gpg --armor --export "$KEY_ID" > "artifacts/pubkey.asc"
+
 # Create GitHub Release
 echo "Creating GitHub release..."
-gh release create "v$NEW_VERSION" "$DEB_FILE" --title "v$NEW_VERSION" --notes "Release v$NEW_VERSION\n\nSHA512: $SHA512"
+gh release create "v$NEW_VERSION" "$DEB_FILE" "${DEB_FILE}.asc" "artifacts/pubkey.asc" "${DEB_FILE}.sha512" --title "v$NEW_VERSION" --notes "Release v$NEW_VERSION\n\nSHA512: $SHA512"
 
 echo "Release v$NEW_VERSION completed successfully!"

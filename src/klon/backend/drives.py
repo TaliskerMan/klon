@@ -1,4 +1,6 @@
-import subprocess
+import subprocess  # nosec B404
+import shutil
+import logging
 import json
 from dataclasses import dataclass
 from typing import List, Optional
@@ -23,9 +25,14 @@ def list_drives() -> List[Drive]:
     Returns a list of Drive objects representing physical disks and their partitions.
     """
     try:
+        lsblk_path = shutil.which('lsblk')
+        if not lsblk_path:
+            logging.error("lsblk not found in PATH")
+            return []
+
         # Run lsblk to get JSON output
-        result = subprocess.run(
-            ['lsblk', '-J', '-o', 'NAME,PATH,SIZE,MODEL,TYPE,MOUNTPOINT'],
+        result = subprocess.run(  # nosec B603
+            [lsblk_path, '-J', '-o', 'NAME,PATH,SIZE,MODEL,TYPE,MOUNTPOINT'],
             capture_output=True,
             text=True,
             check=True
@@ -41,10 +48,10 @@ def list_drives() -> List[Drive]:
         return drives
 
     except subprocess.CalledProcessError as e:
-        print(f"Error running lsblk: {e}")
+        logging.error(f"Error running lsblk: {e}")
         return []
     except json.JSONDecodeError as e:
-        print(f"Error parsing lsblk output: {e}")
+        logging.error(f"Error parsing lsblk output: {e}")
         return []
 
 def _parse_device(device_data: dict) -> Drive:
@@ -64,6 +71,6 @@ def _parse_device(device_data: dict) -> Drive:
 if __name__ == "__main__":
     drives = list_drives()
     for drive in drives:
-        print(f"Found Drive: {drive.model} ({drive.path}) - {drive.size}")
+        logging.info(f"Found Drive: {drive.model} ({drive.path}) - {drive.size}")
         for part in drive.children:
-            print(f"  Partition: {part.name} - {part.size} ({part.mountpoint})")
+            logging.info(f"  Partition: {part.name} - {part.size} ({part.mountpoint})")

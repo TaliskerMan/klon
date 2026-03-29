@@ -1,7 +1,7 @@
 Source: klon
 Section: utils
 Priority: optional
-Maintainer: Chuck Talk <cwtalk1@gmail.com>
+Maintainer: Chuck Talk <chuck@nordheim.online>
 Build-Depends: debhelper-compat (= 13), dh-python, python3-all, python3-setuptools, python3-gi
 Standards-Version: 4.6.2
 Homepage: https://github.com/chucktalk/klon

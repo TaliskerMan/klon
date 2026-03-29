@@ -1,4 +1,6 @@
-import subprocess
+import subprocess  # nosec B404
+import shutil
+import logging
 import os
 
 def clone_drive(source_path: str, dest_path: str, update_callback=None):
@@ -20,13 +22,18 @@ def clone_drive(source_path: str, dest_path: str, update_callback=None):
     if os.path.realpath(source_path) == os.path.realpath(dest_path):
         raise ValueError("Source and Destination cannot be the same")
 
-    print(f"Starting clone from {source_path} to {dest_path}...")
+    logging.info(f"Starting clone from {source_path} to {dest_path}...")
     
     # Using dd with status=progress for now as it doesn't require extra packages like partclone yet
     # In the future, we should look into partclone for efficiency (only used blocks)
+    pkexec_path = shutil.which('pkexec')
+    dd_path = shutil.which('dd')
+    if not pkexec_path or not dd_path:
+        raise RuntimeError("Required binaries (pkexec, dd) not found in PATH")
+
     cmd = [
-        'pkexec', # We need root privileges for block device access
-        'dd',
+        pkexec_path, # We need root privileges for block device access
+        dd_path,
         f'if={source_path}',
         f'of={dest_path}',
         'bs=4M',
@@ -35,7 +42,7 @@ def clone_drive(source_path: str, dest_path: str, update_callback=None):
     ]
     
     try:
-        process = subprocess.Popen(
+        process = subprocess.Popen(  # nosec B603
             cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, # dd outputs progress to stderr
@@ -51,15 +58,15 @@ def clone_drive(source_path: str, dest_path: str, update_callback=None):
                 if update_callback:
                     update_callback(line.strip())
                 else:
-                    print(line.strip())
+                    logging.info(line.strip())
                     
         if process.returncode != 0:
             raise RuntimeError("Clone process failed")
             
-        print("Cloning completed successfully.")
+        logging.info("Cloning completed successfully.")
         
     except Exception as e:
-        print(f"Cloning failed: {e}")
+        logging.error(f"Cloning failed: {e}")
         raise
 
 def backup_to_image(source_device: str, image_path: str, update_callback=None):
@@ -79,4 +86,4 @@ def restore_from_image(image_path: str, dest_device: str, update_callback=None):
 
 if __name__ == "__main__":
     # Test stub - DO NOT RUN without valid args
-    print("This module provides cloning functionality. Import it to use.")
+    logging.warning("This module provides cloning functionality. Import it to use.")

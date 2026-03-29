@@ -1,4 +1,6 @@
 import sys
+import os
+import logging
 import gi
 
 gi.require_version('Gtk', '4.0')
@@ -31,7 +33,7 @@ class KlonApp(Adw.Application):
             resource = Gio.Resource.load(str(resource_file))
             resource._register()
         except Exception as e:
-            print(f"Failed to load GResource: {e}")
+            logging.error(f"Failed to load GResource: {e}")
 
         # Load CSS (from resource now)
         css_provider = Gtk.CssProvider()
@@ -43,7 +45,7 @@ class KlonApp(Adw.Application):
                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
             )
         except Exception as e:
-            print(f"Failed to load CSS: {e}")
+            logging.error(f"Failed to load CSS: {e}")
 
         # Add Icon Resource Path
         icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
@@ -59,7 +61,19 @@ class KlonApp(Adw.Application):
         if win:
             show_about_dialog(win)
 
+def setup_logging():
+    log_dir = os.path.expanduser("~/.cache/klon")
+    os.makedirs(log_dir, exist_ok=True)
+    log_file = os.path.join(log_dir, "klon.log")
+    logging.basicConfig(
+        filename=log_file,
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    )
+    logging.info("Klon Application Started")
+
 def main():
+    setup_logging()
     app = KlonApp()
     return app.run(sys.argv)
 

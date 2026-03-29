@@ -4,6 +4,7 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw, Gdk
 from importlib.metadata import version, PackageNotFoundError
 import sys
+import logging
 from pathlib import Path
 
 def get_version():
@@ -24,7 +25,7 @@ def show_about_dialog(parent):
     win = Adw.AboutWindow(transient_for=parent)
     win.set_application_name("Klon")
     try:
-        texture = Gdk.Texture.new_from_resource("/com/taliskerman/klon/hicolor/512x512/apps/com.taliskerman.klon.png")
+        texture = Gdk.Texture.new_from_resource("/com/taliskerman/klon/hicolor/512x512/apps/klon-clone.png")
         # Ensure Adwaita version supports this (introduced in 1.2, but maybe earlier as paintable?)
         # Adw 1.0 might only have application-icon.
         # Let's try setting property directly if method is missing?
@@ -35,14 +36,14 @@ def show_about_dialog(parent):
              # Fallback: resource path sometimes works as icon name in older GTK?
              win.set_application_icon("com.taliskerman.klon") 
     except Exception as e:
-        print(f"Failed to set logo: {e}")
+        logging.error(f"Failed to set logo: {e}")
         win.set_application_icon("com.taliskerman.klon")
     
     win.set_developer_name("Chuck Talk")
     win.set_version(get_version())
     win.set_copyright("© 2026 Chuck Talk")
     win.set_website("https://chucktalk.com")
-    win.set_issue_url("mailto:cwtalk1@gmail.com")
+    win.set_issue_url("mailto:chuck@nordheim.online")
     win.set_license_type(Gtk.License.GPL_3_0)
     win.present()
 
