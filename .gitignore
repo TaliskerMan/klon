@@ -118,3 +118,7 @@ dmypy.json
 .idea/
 *.swp
 *~
+
+# Release Artifacts
+artifacts/
+release_artifacts/
