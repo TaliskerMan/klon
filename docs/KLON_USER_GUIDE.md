@@ -1,72 +1,85 @@
-# Klon - Comprehensive User Guide
+# Klon — System Cloning & Disaster Recovery Guide
+
+Welcome to the **Klon** workstation cloning and disaster recovery manual. Klon is a specialized system administration utility built in Python (GTK4 + Libadwaita) to help GNOME workstation administrators clone, back up, and restore physical Linux volumes in emergencies.
 
 > [!CAUTION]
-> **CRITICAL WARNING: TESTING PHASE**
-> **Klon is currently in the active testing phase and is NOT yet recommended for production use.** 
-> While it is designed to be your primary emergency recovery tool, using it on production drives at this stage could result in unintended data loss or incomplete backups. Please strictly limit your use of this tool to safe, experimental, or testing environments only.
-
-Welcome to **Klon**! Klon is a specialized system cloning and recovery utility specifically engineered for the local GNOME laptop or workstation administrator.
+> **CRITICAL WARNING: ACTIVE TESTING PHASE (v0.2.9)**
+> **Klon is currently in the active testing phase and is NOT recommended for production environments.** 
+> Using block-level cloning utilities on production storage hosts at this stage carries risk of data loss or corrupted volumes. Limit your use of this software strictly to experimental, verification, or non-critical storage pools.
 
 ---
 
-## 🚀 1. What Klon Does
+## 🖥️ 1. Core Modules & Tab Views
 
-Klon is built exclusively for **emergency recovery**. 
+Klon is organized into distinct functional screens designed to simplify high-stress recovery procedures:
 
-When a critical failure occurs—whether due to a physical drive dying, a catastrophic update, or severe OS corruption—you need a reliable way to get your workstation back online immediately. Klon replaces the need to memorize dangerous, complex `dd` or `rsync` terminal commands by wrapping everything in a simple, user-friendly GTK4 + Libadwaita interface.
-
-It is used to:
-* **Perform Full System Clones:** Safely back up your entire OS drive to an external disk.
-* **Generate Bootable Recovery Media:** Create emergency USB drives that allow you to boot into a minimal environment and restore your cloned system from bare metal.
-
----
-
-## 💾 2. Installation Instructions
-
-Klon is distributed as a highly verifiable, signed Debian package (`.deb`). 
-
-1. **Obtain the Package:** Download the `klon_*.deb` file and its corresponding `.sha512` file.
-2. **Verify Integrity:** Before installing system-level cloning tools, you should verify the package hash:
-   ```bash
-   sha512sum -c klon_*.deb.sha512
-   ```
-3. **Install the Application:** Execute the following in your terminal:
-   ```bash
-   sudo dpkg -i klon_*.deb
-   sudo apt-get install -f  # Resolves any missing dependencies
-   ```
-4. **Launch:** Open your GNOME Application menu and search for **Klon**.
+| Diagnostic Screen | Purpose | Low-Level Operations |
+| :--- | :--- | :--- |
+| **System Clone** | Creates block-level clones of your primary OS drive onto an external drive. | `dd`, block cloning, disk formatting |
+| **Recovery Media** | Formats external flash drives and writes a minimal, bootable recovery OS. | `/dev/sdX` formatting, ISO write, bootable structure |
+| **Disaster Restore** | Bootable live recovery suite to restore systems from clone blocks. | Bare-metal volume write, partition adjustments |
 
 ---
 
-## 🎮 3. Navigation & Usage
+## 🛠️ 2. GUI Polish & Recent Changes (v0.2.0+)
 
-Klon's interface is intentionally streamlined and uncluttered, ensuring that during high-stress emergency scenarios, you cannot make a wrong click.
+Version `0.2.x` introduces massive usability changes, desktop scaling improvements, and crash fixes:
 
-### Creating a System Clone
-*Note: Because this is a block-level clone, your destination drive must be equal to or larger than your source OS drive.*
+### UI & Aesthetics Refined
+*   **Minimal Bold Navigation:** Replaced complex tab widgets with simplified, text-only bold headers to avoid confusion.
+*   **Branding & Identity:** Integrated large branding icons centered at the bottom of each page.
+*   **Dynamic About Panel:** Integrates dynamic version discovery and a native License viewer dialog showing full GPL-3.0 terms.
+*   **Transparency Fixes:** Fixed application icon transparency, adding a clean circular crop.
 
-1. Connect your dedicated external backup drive. **Warning:** All existing data on this target drive will be completely overwritten!
-2. Open Klon and navigate to the **Clone** tab.
-3. Select your current primary OS drive as the **Source**.
-4. Select your external drive as the **Destination**.
-5. Click **Start Clone**. 
-   * **Awareness:** This process will take significant time depending on your drive speed and total disk size. Do not put your laptop to sleep, close the application, or interrupt this process.
-
-### Creating Bootable Recovery Media
-To restore a dead system, you must have a way to boot the machine independently of your broken hard drive.
-
-1. Insert a blank USB flash drive (8GB or larger).
-2. Navigate to the **Recovery Media** tab in the Klon interface.
-3. Select the attached USB drive.
-4. Click **Create Media**. Klon will format the USB and write a minimal, bootable recovery OS to the drive.
-
-### Emergency Bare-Metal Restoration
-If your primary workstation drive fails and your machine will no longer boot:
-1. Physically replace the failed drive in your laptop/workstation with a new drive.
-2. Insert your **Bootable Recovery USB**.
-3. Connect your external hard drive containing your **System Clone**.
-4. Power on the machine and boot from the USB drive. The recovery environment will guide you through selecting your system clone and securely writing it back to the new physical drive.
+### Critical Runtime Fixes
+*   **GApplication Chaining Crash:** Solved a critical startup crash caused by misconfigured application initialization chains.
+*   **Recovery USB Direct Layout Crash:** Resolved a Gtk Box layout exception caused by hosting `ActionRow` widgets directly in page view holders.
+*   **IsoPage Dropdown Regression:** Fixed an `AttributeError` in the ISO builder interface where targets mapped to mismatched dropdown arrays (`target_dropdown` vs `dest_dropdown`).
+*   **Restore Page Regression:** Restored missing page components in the restoration setup flow.
 
 ---
-*Klon - Emergency recovery made simple. A Nordheim Online Product.*
+
+## 📥 3. Installation & Verification
+
+Klon is compiled and distributed as a native system package (`.deb`).
+
+### Deployment Commands
+1.  **Download the Artifacts:** Fetch the `.deb` package file and its hash verification file.
+2.  **Verify Package Integrity:**
+    ```bash
+    sha512sum -c klon_*.deb.sha512
+    ```
+3.  **Install the Utility:**
+    ```bash
+    sudo dpkg -i klon_*.deb
+    sudo apt-get install -f  # Resolves any missing GTK4/Libadwaita runtimes
+    ```
+
+---
+
+## 🏗️ 4. Release & Debian Packaging Pipeline
+
+Klon releases packages and tags repository sources automatically via `release.sh`:
+
+```mermaid
+graph TD
+    StartPipeline([Start: release.sh]) --> Version[1. Auto-increment patch version via pyproject.toml]
+    Version --> Changelog[2. Append release details to debian/changelog via dch]
+    Changelog --> Git[3. Commit & push version tags to repository]
+    Git --> Build[4. Build package natively using debuild -k chuck@nordheim.online]
+    Build --> Stage[5. Move compiled outputs to artifacts/ folder]
+    Stage --> Hash[6. Compute SHA512 hash sum file bender_*.deb.sha512]
+    Hash --> SignDeb[7. Detached-sign .deb using GPG key chuck@nordheim.online]
+    SignDeb --> Export[8. Export GPG Public Key artifacts/pubkey.asc]
+    Export --> Publish[9. Run GitHub CLI gh release create uploading deb, asc, pubkey, and sha512]
+    Publish --> EndPipeline([End: Release published on GitHub])
+```
+
+### Released Deliverables
+*   **Package Installer:** `artifacts/klon_${VERSION}-1_all.deb`
+*   **Detached GPG Signature:** `artifacts/klon_${VERSION}-1_all.deb.asc`
+*   **SHA512 Checksums:** `artifacts/klon_${VERSION}-1_all.deb.sha512`
+*   **Public Key Certificate:** `artifacts/pubkey.asc`
+
+---
+*Klon is open-source software distributed under the GNU General Public License v3.*
