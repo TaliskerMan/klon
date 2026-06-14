@@ -1,3 +1,9 @@
+"""Backup page UI controller.
+
+This module maps UI handlers to the backup tab in the MainWindow, permitting users
+to select a block device and backup target path to dump raw disk images in the background.
+"""
+
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -9,8 +15,14 @@ from ...backend.clone import backup_to_image
 
 @Gtk.Template(resource_path='/com/taliskerman/klon/backup_page.ui')
 class BackupPage(Gtk.Box):
+    """Layout controller class for disk backup UI.
+
+    Binds widgets from backup_page.ui to local attributes, triggers file selection
+    native dialogs, and delegates the raw image creation task to a background thread.
+    """
     __gtype_name__ = 'BackupPage'
 
+    # Template child UI elements defined in backup_page.ui
     backup_source_dropdown = Gtk.Template.Child()
     backup_dest_button = Gtk.Template.Child()
     backup_dest_path_label = Gtk.Template.Child()
@@ -18,6 +30,11 @@ class BackupPage(Gtk.Box):
     backup_status_label = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
+        """Initialize BackupPage widget instances and connect event signals.
+
+        Args:
+            window: Parent Gtk.Window hosting this page, used as transient anchor.
+        """
         super().__init__(**kwargs)
         self.window = window
         self.selected_file_path = None
@@ -28,12 +45,18 @@ class BackupPage(Gtk.Box):
         self.refresh_drives()
 
     def refresh_drives(self):
+        """Scan physical drives via backend list_drives and populate the dropdown menu."""
         self.drives = list_drives()
         drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
         self.source_model = Gtk.StringList.new(drive_strings)
         self.backup_source_dropdown.set_model(self.source_model)
 
     def on_file_chooser_clicked(self, btn):
+        """Open a native file chooser dialog in SAVE mode to designate the backup image path.
+
+        Args:
+            btn: The Gtk.Button trigger widget.
+        """
         dialog = Gtk.FileChooserNative(
             title="Save Backup Image",
             transient_for=self.window,
@@ -46,6 +69,12 @@ class BackupPage(Gtk.Box):
         dialog.show()
 
     def on_file_response(self, dialog, response):
+        """Handle Gtk.FileChooserNative response callbacks.
+
+        Args:
+            dialog: The FileChooserNative dialog instance.
+            response: Gtk.ResponseType indicating user choices (e.g. ACCEPT, CANCEL).
+        """
         if response == Gtk.ResponseType.ACCEPT:
             file = dialog.get_file()
             self.selected_file_path = file.get_path()
@@ -53,6 +82,11 @@ class BackupPage(Gtk.Box):
         dialog.destroy()
 
     def on_backup_clicked(self, btn):
+        """Validate input parameters and trigger the confirmation dialog.
+
+        Args:
+            btn: The Gtk.Button trigger widget.
+        """
         source_idx = self.backup_source_dropdown.get_selected()
         if source_idx == Gtk.INVALID_LIST_POSITION:
             self.show_error("Please select a source drive.")
@@ -64,6 +98,7 @@ class BackupPage(Gtk.Box):
 
         source_drive = self.drives[source_idx]
         
+        # Confirmation dialog is required as backing up can be long-running
         dialog = Adw.MessageDialog(
             transient_for=self.window,
             heading="Confirm Backup",
@@ -76,29 +111,58 @@ class BackupPage(Gtk.Box):
         dialog.present()
 
     def on_confirm_response(self, dialog, response, source_path):
+        """Evaluate confirmation responses to trigger the backup task.
+
+        Args:
+            dialog: The MessageDialog instance.
+            response: Response identifier string.
+            source_path: Target drive source path node.
+        """
         if response == "backup":
             self.start_backup(source_path)
 
-    def start_backup(self, source_path):
+    def start_backup(self, source_path: str):
+        """Disable buttons, status message updating, and spawn a daemon worker thread.
+
+        Args:
+            source_path: The physical drive path.
+        """
         self.backup_btn.set_sensitive(False)
         self.backup_status_label.set_text("Backing up...")
         
-        # In real world, we need root. The backend wrapper uses pkexec.
+        # Thread delegation prevents UI locking. The subprocess will prompt for sudo permissions using pkexec.
         thread = threading.Thread(target=self._run_backup, args=(source_path, self.selected_file_path))
         thread.daemon = True
         thread.start()
 
-    def _run_backup(self, source, dest):
+    def _run_backup(self, source: str, dest: str):
+        """Worker thread entrypoint executing backend backup image calls.
+
+        Args:
+            source: Source device path.
+            dest: Target backup image path.
+        """
         try:
             backup_to_image(source, dest, update_callback=self._update_progress)
             GLib.idle_add(self._finished, True, None)
         except Exception as e:
             GLib.idle_add(self._finished, False, str(e))
 
-    def _update_progress(self, line):
+    def _update_progress(self, line: str):
+        """Callback to marshal status messages back to the GTK main UI loop.
+
+        Args:
+            line: Status details reported by dd.
+        """
         GLib.idle_add(self.backup_status_label.set_text, line)
 
-    def _finished(self, success, error_msg):
+    def _finished(self, success: bool, error_msg: str):
+        """Update buttons status, set final status labels, and show alert dialogs.
+
+        Args:
+            success: Whether the backup completed successfully.
+            error_msg: String explaining errors if success is False.
+        """
         self.backup_btn.set_sensitive(True)
         if success:
             self.backup_status_label.set_text("Backup Complete!")
@@ -107,12 +171,23 @@ class BackupPage(Gtk.Box):
             self.backup_status_label.set_text("Backup Failed")
             self.show_error(str(error_msg))
 
-    def show_error(self, msg):
+    def show_error(self, msg: str):
+        """Display an Adw.MessageDialog warning popup.
+
+        Args:
+            msg: The error description.
+        """
         dialog = Adw.MessageDialog(transient_for=self.window, heading="Error", body=msg)
         dialog.add_response("ok", "OK")
         dialog.present()
 
-    def show_success(self, msg):
+    def show_success(self, msg: str):
+        """Display an Adw.MessageDialog confirmation popup.
+
+        Args:
+            msg: The success message.
+        """
         dialog = Adw.MessageDialog(transient_for=self.window, heading="Success", body=msg)
         dialog.add_response("ok", "OK")
         dialog.present()
+

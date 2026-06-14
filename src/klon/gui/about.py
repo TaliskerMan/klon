@@ -1,3 +1,10 @@
+"""Application description and licensing dialogue window.
+
+This module implements the Adw.AboutWindow wrapper, showing author details, GPLv3
+licensing terms, and dynamically parsing the version string from pyproject.toml
+if package metadata is unavailable.
+"""
+
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -7,7 +14,16 @@ import sys
 import logging
 from pathlib import Path
 
-def get_version():
+def get_version() -> str:
+    """Retrieve the application version string.
+
+    Tries to retrieve the version via importlib.metadata first. If the package is
+    not installed (e.g., in development mode), it falls back to reading the
+    pyproject.toml version field directly.
+
+    Returns:
+        The version string, defaulting to "0.0.0-dev" if parsing fails completely.
+    """
     try:
         return version("klon")
     except PackageNotFoundError:
@@ -21,7 +37,15 @@ def get_version():
             return "0.0.0-dev"
     return "0.2.0"
 
-def show_about_dialog(parent):
+def show_about_dialog(parent: Gtk.Window):
+    """Instantiate and present the Adw.AboutWindow.
+
+    Configures the application name, developer profile, GPL v3 licensing details,
+    website links, and loads the com.taliskerman.klon icon texture.
+
+    Args:
+        parent: The transient parent Gtk Window.
+    """
     win = Adw.AboutWindow(transient_for=parent)
     win.set_application_name("Klon")
     try:
@@ -29,12 +53,11 @@ def show_about_dialog(parent):
         # Ensure Adwaita version supports this (introduced in 1.2, but maybe earlier as paintable?)
         # Adw 1.0 might only have application-icon.
         # Let's try setting property directly if method is missing?
-        # Safe bet: try attribute.
         if hasattr(win, "set_application_logo"):
-             win.set_application_logo(texture)
+            win.set_application_logo(texture)
         else:
-             # Fallback: resource path sometimes works as icon name in older GTK?
-             win.set_application_icon("com.taliskerman.klon") 
+            # Fallback: resource path sometimes works as icon name in older GTK?
+            win.set_application_icon("com.taliskerman.klon") 
     except Exception as e:
         logging.error(f"Failed to set logo: {e}")
         win.set_application_icon("com.taliskerman.klon")
@@ -46,4 +69,5 @@ def show_about_dialog(parent):
     win.set_issue_url("mailto:chuck@nordheim.online")
     win.set_license_type(Gtk.License.GPL_3_0)
     win.present()
+
 
