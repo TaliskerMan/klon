@@ -122,8 +122,8 @@ class ClonePage(Gtk.Box):
         try:
             clone_drive(source_path, dest_path, update_callback=self._update_progress)
             GLib.idle_add(self._clone_finished, True, None)
-        except Exception as e:
-            GLib.idle_add(self._clone_finished, False, str(e))
+        except Exception as error:
+            GLib.idle_add(self._clone_finished, False, str(error))
 
     def _update_progress(self, status_line: str):
         """Callback to marshal status messages back to the GTK main UI loop.

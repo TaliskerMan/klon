@@ -32,10 +32,10 @@ class KlonApp(Adw.Application):
     def do_activate(self):
         """Handle application activation by creating or focusing the MainWindow."""
         from .gui.window import MainWindow
-        win = self.props.active_window
-        if not win:
-            win = MainWindow(application=self)
-        win.present()
+        window = self.props.active_window
+        if not window:
+            window = MainWindow(application=self)
+        window.present()
         
     def do_startup(self):
         """Execute early initialization tasks such as GResource and CSS loading."""
@@ -48,8 +48,8 @@ class KlonApp(Adw.Application):
             resource_file = files('klon').joinpath('klon.gresource')
             resource = Gio.Resource.load(str(resource_file))
             resource._register()
-        except Exception as e:
-            logging.error(f"Failed to load GResource: {e}")
+        except Exception as error:
+            logging.error(f"Failed to load GResource: {error}")
 
         # Load global application styling (from resource bundle now)
         css_provider = Gtk.CssProvider()
@@ -60,8 +60,8 @@ class KlonApp(Adw.Application):
                 css_provider,
                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
             )
-        except Exception as e:
-            logging.error(f"Failed to load CSS: {e}")
+        except Exception as error:
+            logging.error(f"Failed to load CSS: {error}")
 
         # Register custom icons contained in the resource path
         icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
@@ -74,9 +74,9 @@ class KlonApp(Adw.Application):
 
     def on_about_action(self, action, param):
         """Callback to show the Libadwaita About dialog when triggered."""
-        win = self.props.active_window
-        if win:
-            show_about_dialog(win)
+        window = self.props.active_window
+        if window:
+            show_about_dialog(window)
 
 def setup_logging():
     """Configure directory structure and logging patterns for the Klon runtime."""

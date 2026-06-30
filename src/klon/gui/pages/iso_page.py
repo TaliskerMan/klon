@@ -12,7 +12,14 @@ import threading
 import os
 
 from ...backend.drives import list_drives
-from ...backend.iso import download_iso, flash_iso_and_setup_persistence, DEFAULT_ISO_URL, DEFAULT_ISO_NAME
+from ...backend.iso import (
+    download_iso,
+    flash_iso_and_setup_persistence,
+    resolve_current_iso,
+    DEFAULT_ISO_NAME,
+    PersistenceError,
+)
+from ...backend.safety import UnsafeOperationError
 
 @Gtk.Template(resource_path='/com/taliskerman/klon/iso_page.ui')
 class IsoPage(Gtk.Box):
@@ -56,33 +63,53 @@ class IsoPage(Gtk.Box):
     def refresh_drives(self):
         """Refresh system physical drives and populate the target USB dropdown."""
         self.drives = list_drives()
-        drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
+        drive_strings = [self._drive_label(d) for d in self.drives]
         self.dest_model = Gtk.StringList.new(drive_strings)
         self.iso_target_dropdown.set_model(self.dest_model)
 
-    def on_download_clicked(self, btn):
+    @staticmethod
+    def _drive_label(d):
+        """Human label including any mountpoint(s) so the user can see what's in use."""
+        mounts = []
+        if getattr(d, "mountpoint", None):
+            mounts.append(d.mountpoint)
+        for child in getattr(d, "children", []) or []:
+            if getattr(child, "mountpoint", None):
+                mounts.append(child.mountpoint)
+        suffix = f" — mounted: {', '.join(mounts)}" if mounts else ""
+        return f"{d.model} ({d.name}) - {d.size}{suffix}"
+
+    def on_download_clicked(self, _button):
         """Trigger background ISO download stream.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         self.iso_dl_button.set_sensitive(False)
-        self.iso_status_label.set_text("Downloading ISO...")
+        self.iso_status_label.set_text("Resolving current Debian Live ISO...")
         target_path = os.path.expanduser(f"~/Downloads/{DEFAULT_ISO_NAME}")
-        
-        thread = threading.Thread(target=self._run_download, args=(DEFAULT_ISO_URL, target_path))
+
+        thread = threading.Thread(target=self._run_download, args=(target_path,))
         thread.daemon = True
         thread.start()
 
-    def _run_download(self, url: str, path: str):
-        """Worker thread entrypoint executing requests GET stream downloads.
+    def _run_download(self, path: str):
+        """Worker thread: resolve the current ISO, download it, and verify SHA-256.
 
         Args:
-            url: Remote ISO URL.
             path: Target local file location.
         """
-        success = download_iso(url, path, progress_callback=self._update_dl_progress)
-        GLib.idle_add(self._dl_finished, success, path)
+        try:
+            url, _name, sha256 = resolve_current_iso()
+        except Exception as error:
+            GLib.idle_add(self._dl_finished, False, path, str(error))
+            return
+        success = download_iso(
+            url, path,
+            progress_callback=self._update_dl_progress,
+            expected_sha256=sha256,
+        )
+        GLib.idle_add(self._dl_finished, success, path, None)
 
     def _update_dl_progress(self, percent: float, msg: str):
         """Callback to marshal download status updates back to the UI.
@@ -93,26 +120,29 @@ class IsoPage(Gtk.Box):
         """
         GLib.idle_add(self.iso_status_label.set_text, msg)
 
-    def _dl_finished(self, success: bool, path: str):
+    def _dl_finished(self, success: bool, path: str, error_msg=None):
         """Update download buttons status and set target ISO paths on success.
 
         Args:
-            success: Whether the download succeeded.
+            success: Whether the download (and SHA-256 verification) succeeded.
             path: Path where the ISO was downloaded.
+            error_msg: Optional reason for failure.
         """
         self.iso_dl_button.set_sensitive(True)
         if success:
-            self.iso_status_label.set_text("Download Complete!")
+            self.iso_status_label.set_text("Download verified & complete!")
             self.selected_iso_path = path
             self.iso_path_label.set_text(os.path.basename(path))
         else:
             self.iso_status_label.set_text("Download Failed")
+            if error_msg:
+                self.show_error(f"Download failed: {error_msg}")
 
-    def on_file_chooser_clicked(self, btn):
+    def on_file_chooser_clicked(self, _button):
         """Open a native file chooser dialog in OPEN mode to import a custom ISO.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         dialog = Gtk.FileChooserNative(
             title="Select ISO",
@@ -137,11 +167,11 @@ class IsoPage(Gtk.Box):
             self.iso_path_label.set_text(file.get_basename())
         dialog.destroy()
 
-    def on_create_clicked(self, btn):
+    def on_create_clicked(self, _button):
         """Validate options and request confirmation to begin flashing.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         dest_idx = self.iso_target_dropdown.get_selected()
         if dest_idx == Gtk.INVALID_LIST_POSITION:
@@ -198,10 +228,22 @@ class IsoPage(Gtk.Box):
             dest: Target USB drive path.
         """
         try:
-            flash_iso_and_setup_persistence(iso, dest, progress_callback=self._update_progress)
-            GLib.idle_add(self._finished, True, None)
-        except Exception as e:
-            GLib.idle_add(self._finished, False, str(e))
+            # The user confirmed the destructive flash, so we permit a mounted
+            # (non-root) destination; the backend still hard-refuses the root disk.
+            flash_iso_and_setup_persistence(
+                iso, dest,
+                progress_callback=self._update_progress,
+                enable_persistence=True,
+                allow_mounted_dest=True,
+            )
+            GLib.idle_add(self._finished, "ok", None)
+        except PersistenceError as error:
+            # We treat lack of persistence support as a warning since the ISO itself flashed fine.
+            GLib.idle_add(self._finished, "no_persistence", str(error))
+        except UnsafeOperationError as error:
+            GLib.idle_add(self._finished, "refused", str(error))
+        except Exception as error:
+            GLib.idle_add(self._finished, "failed", str(error))
 
     def _update_progress(self, percent: float, msg: str):
         """Callback to marshal flashing progress messages back to the UI.

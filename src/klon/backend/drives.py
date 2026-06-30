@@ -69,11 +69,11 @@ def list_drives() -> List[Drive]:
             
         return drives
 
-    except subprocess.CalledProcessError as e:
-        logging.error(f"Error running lsblk: {e}")
+    except subprocess.CalledProcessError as error:
+        logging.error(f"Error running lsblk: {error}")
         return []
-    except json.JSONDecodeError as e:
-        logging.error(f"Error parsing lsblk output: {e}")
+    except json.JSONDecodeError as error:
+        logging.error(f"Error parsing lsblk output: {error}")
         return []
 
 def _parse_device(device_data: dict) -> Drive:

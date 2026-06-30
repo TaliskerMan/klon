@@ -51,11 +51,11 @@ class RestorePage(Gtk.Box):
         self.dest_model = Gtk.StringList.new(drive_strings)
         self.restore_dest_dropdown.set_model(self.dest_model)
 
-    def on_file_chooser_clicked(self, btn):
+    def on_file_chooser_clicked(self, _button):
         """Open a native file chooser dialog in OPEN mode to import a raw backup image.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         dialog = Gtk.FileChooserNative(
             title="Select Backup Image",
@@ -80,11 +80,11 @@ class RestorePage(Gtk.Box):
             self.restore_source_path_label.set_text(file.get_basename())
         dialog.destroy()
 
-    def on_restore_clicked(self, btn):
+    def on_restore_clicked(self, _button):
         """Validate options and request confirmation warning dialog before writing.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         dest_idx = self.restore_dest_dropdown.get_selected()
         if dest_idx == Gtk.INVALID_LIST_POSITION:
@@ -143,8 +143,8 @@ class RestorePage(Gtk.Box):
         try:
             restore_from_image(source, dest, update_callback=self._update_progress)
             GLib.idle_add(self._finished, True, None)
-        except Exception as e:
-            GLib.idle_add(self._finished, False, str(e))
+        except Exception as error:
+            GLib.idle_add(self._finished, False, str(error))
 
     def _update_progress(self, line: str):
         """Callback to marshal restore status messages back to the UI.

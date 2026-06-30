@@ -51,11 +51,11 @@ class BackupPage(Gtk.Box):
         self.source_model = Gtk.StringList.new(drive_strings)
         self.backup_source_dropdown.set_model(self.source_model)
 
-    def on_file_chooser_clicked(self, btn):
+    def on_file_chooser_clicked(self, _button):
         """Open a native file chooser dialog in SAVE mode to designate the backup image path.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         dialog = Gtk.FileChooserNative(
             title="Save Backup Image",
@@ -81,11 +81,11 @@ class BackupPage(Gtk.Box):
             self.backup_dest_path_label.set_text(file.get_basename())
         dialog.destroy()
 
-    def on_backup_clicked(self, btn):
+    def on_backup_clicked(self, _button):
         """Validate input parameters and trigger the confirmation dialog.
 
         Args:
-            btn: The Gtk.Button trigger widget.
+            _button: The Gtk.Button trigger widget.
         """
         source_idx = self.backup_source_dropdown.get_selected()
         if source_idx == Gtk.INVALID_LIST_POSITION:
@@ -145,8 +145,8 @@ class BackupPage(Gtk.Box):
         try:
             backup_to_image(source, dest, update_callback=self._update_progress)
             GLib.idle_add(self._finished, True, None)
-        except Exception as e:
-            GLib.idle_add(self._finished, False, str(e))
+        except Exception as error:
+            GLib.idle_add(self._finished, False, str(error))
 
     def _update_progress(self, line: str):
         """Callback to marshal status messages back to the GTK main UI loop.

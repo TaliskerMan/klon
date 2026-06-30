@@ -3,8 +3,8 @@
 Welcome to the **Klon** workstation cloning and disaster recovery manual. Klon is a specialized system administration utility built in Python (GTK4 + Libadwaita) to help GNOME workstation administrators clone, back up, and restore physical Linux volumes in emergencies.
 
 > [!CAUTION]
-> **CRITICAL WARNING: ACTIVE TESTING PHASE (v0.2.9)**
-> **Klon is currently in the active testing phase and is NOT recommended for production environments.** 
+> **CRITICAL WARNING: BETA PHASE (v0.2.9)**
+> **Klon is currently in the beta phase and should be used with caution in production environments.** 
 > Using block-level cloning utilities on production storage hosts at this stage carries risk of data loss or corrupted volumes. Limit your use of this software strictly to experimental, verification, or non-critical storage pools.
 
 ---
@@ -16,8 +16,9 @@ Klon is organized into distinct functional screens designed to simplify high-str
 | Diagnostic Screen | Purpose | Low-Level Operations |
 | :--- | :--- | :--- |
 | **System Clone** | Creates block-level clones of your primary OS drive onto an external drive. | `dd`, block cloning, disk formatting |
+| **System Backup** | Creates a backup image file of your primary drive to a specified destination. | `dd`, image file creation |
 | **Recovery Media** | Formats external flash drives and writes a minimal, bootable recovery OS. | `/dev/sdX` formatting, ISO write, bootable structure |
-| **Disaster Restore** | Bootable live recovery suite to restore systems from clone blocks. | Bare-metal volume write, partition adjustments |
+| **Disaster Restore** | Bootable live recovery suite to restore systems from clone blocks or backup images. | Bare-metal volume write, partition adjustments |
 
 ---
 
