@@ -65,8 +65,8 @@ def show_about_dialog(parent: Gtk.Window):
     window.set_developer_name("Chuck Talk")
     window.set_version(get_version())
     window.set_copyright("© 2026 Chuck Talk")
-    window.set_website("https://chucktalk.com")
-    window.set_issue_url("mailto:chuck@nordheim.online")
+    window.set_website("https://github.com/TaliskerMan/klon")
+    window.set_issue_url("https://github.com/TaliskerMan/klon/issues")
     window.set_license_type(Gtk.License.GPL_3_0)
     window.present()
 

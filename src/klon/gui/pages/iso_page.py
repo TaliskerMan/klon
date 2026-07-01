@@ -254,17 +254,30 @@ class IsoPage(Gtk.Box):
         """
         GLib.idle_add(self.iso_status_label.set_text, msg)
 
-    def _finished(self, success: bool, error_msg: str):
+    def _finished(self, status: str, error_msg: str):
         """Update buttons status, set final status labels, and show alert dialogs.
 
         Args:
-            success: Whether the flashing process finished successfully.
-            error_msg: String explaining errors if success is False.
+            status: One of "ok", "no_persistence", "refused", or "failed".
+            error_msg: String explaining errors for the non-"ok" outcomes.
         """
         self.iso_create_btn.set_sensitive(True)
-        if success:
+        if status == "ok":
             self.iso_status_label.set_text("Recovery Drive Created!")
-            self.show_success("ISO Flashed Successfully.\n\nNote: Persistence partition creation is experimental/manual in this version.")
+            self.show_success(
+                "ISO flashed and a persistence partition was created.\n\n"
+                "Boot with the 'persistence' option to keep your changes."
+            )
+        elif status == "no_persistence":
+            # The bootable USB is fine; only the persistence step failed.
+            self.iso_status_label.set_text("Flashed (no persistence)")
+            self.show_success(
+                "ISO flashed successfully and the USB is bootable.\n\n"
+                f"Persistence could not be set up: {error_msg}"
+            )
+        elif status == "refused":
+            self.iso_status_label.set_text("Refused for safety")
+            self.show_error(str(error_msg))
         else:
             self.iso_status_label.set_text("Flash Failed")
             self.show_error(str(error_msg))

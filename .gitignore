@@ -28,6 +28,7 @@ MANIFEST
 # Debian packaging
 debian/klon/
 debian/.debhelper/
+debian/*.debhelper
 debian/files
 debian/*.substvars
 debian/*.debhelper
@@ -122,3 +123,8 @@ dmypy.json
 # Release Artifacts
 artifacts/
 release_artifacts/
+*.deb
+*.deb.sha512
+
+# macOS
+.DS_Store

@@ -4,6 +4,39 @@ All notable changes to the Klon project are documented in this file. This projec
 
 ---
 
+## [0.3.0] - 2026-07-01
+
+### Added
+- **Destructive-write safety guards** (`backend/safety.py`): every clone/restore/flash
+  is validated before any `dd` runs. Always refuses the running root/system disk;
+  refuses same/child devices, oversized sources, and mounted destinations unless the
+  user explicitly confirms the override. Fails safe if device sizes can't be read.
+- **Clone verification:** after a disk-to-disk clone, the destination is read back and
+  compared to the source by SHA-256, and the result is surfaced in the UI.
+- **ISO integrity:** the Debian Live ISO filename is now resolved dynamically from
+  Debian's `SHA256SUMS` (no more hardcoded, soon-to-404 URL), downloads use connect/read
+  timeouts, and the finished image is SHA-256 verified — a corrupt download is deleted
+  rather than flashed.
+- **Real persistence partition:** recovery USBs can now create an actual ext4
+  `persistence` partition (sgdisk + mkfs.ext4 + `persistence.conf`) instead of the
+  previous no-op. A persistence failure is reported distinctly from a flash failure.
+- **Backend test suite** (`tests/`, pytest): covers the safety guards, backup/verify
+  paths, and ISO resolution/checksum logic; runs with no hardware and no GTK.
+- **Continuous integration:** GitHub Actions runs the test suite on push/PR.
+
+### Fixed
+- **Backup-to-image** no longer rejects a not-yet-existing target image file (P0-1).
+- `dd` clones now use `conv=fsync,noerror,sync` so a clone of failing media continues
+  past read errors instead of aborting.
+
+### Changed
+- Device pickers now show each disk's current mountpoint(s).
+- Corrected maintainer email and repository homepage; re-scoped the Snyk audit note to
+  state clearly that a clean automated scan is not a safety sign-off.
+- Untracked build artifacts (`.deb`/`.sha512`, debhelper output, `.DS_Store`).
+
+---
+
 ## [0.2.9] - 2026-03-29
 
 ### Added

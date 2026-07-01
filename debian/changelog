@@ -1,3 +1,17 @@
+klon (0.3.0-1) noble; urgency=medium
+
+  * Add destructive-write safety guards (refuse root disk, mounted/oversized/
+    same-device destinations) applied to clone, restore, and ISO flash.
+  * Verify disk-to-disk clones by SHA-256 read-back.
+  * Resolve the Debian Live ISO dynamically and verify its SHA-256; add
+    download timeouts; delete corrupt downloads instead of flashing them.
+  * Create a real ext4 'persistence' partition for recovery USBs.
+  * Fix backup-to-image rejecting a not-yet-existing target file.
+  * Add pytest backend test suite and GitHub Actions CI.
+  * Add gdisk and e2fsprogs runtime dependencies (persistence).
+
+ -- Chuck Talk <chuck@nordheim.online>  Wed, 01 Jul 2026 09:00:00 -0500
+
 klon (0.2.9-1) noble; urgency=medium
 
   * New release 0.2.9

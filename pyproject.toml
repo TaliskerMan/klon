@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "klon"
-version = "0.2.9"
+version = "0.3.0"
 description = "A system cloning and recovery tool for Pop!_OS"
 readme = "README.md"
 authors = [
@@ -24,6 +24,9 @@ dependencies = [
     "requests",
 ]
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [project.scripts]
 klon = "klon.main:main"
 
@@ -32,3 +35,8 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 klon = ["*.gresource"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Backend tests import from src/ (see tests/conftest.py) and mock all hardware
+# access, so they run without a GTK runtime or any real block device.

@@ -12,6 +12,19 @@ import threading
 
 from ...backend.drives import list_drives
 from ...backend.clone import restore_from_image
+from ...backend.safety import UnsafeOperationError
+
+
+def _drive_label(d):
+    """Human label including any mountpoint(s) so in-use disks are obvious."""
+    mounts = []
+    if getattr(d, "mountpoint", None):
+        mounts.append(d.mountpoint)
+    for child in getattr(d, "children", []) or []:
+        if getattr(child, "mountpoint", None):
+            mounts.append(child.mountpoint)
+    suffix = f" — mounted: {', '.join(mounts)}" if mounts else ""
+    return f"{d.model} ({d.name}) - {d.size}{suffix}"
 
 @Gtk.Template(resource_path='/com/taliskerman/klon/restore_page.ui')
 class RestorePage(Gtk.Box):
@@ -47,7 +60,7 @@ class RestorePage(Gtk.Box):
     def refresh_drives(self):
         """Scan physical drives via backend list_drives and populate the destination dropdown."""
         self.drives = list_drives()
-        drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
+        drive_strings = [_drive_label(d) for d in self.drives]
         self.dest_model = Gtk.StringList.new(drive_strings)
         self.restore_dest_dropdown.set_model(self.dest_model)
 
@@ -96,12 +109,19 @@ class RestorePage(Gtk.Box):
             return
 
         dest_drive = self.drives[dest_idx]
-        
-        # Confirmation dialog is required as restoring completely overwrites target blocks
+
+        # Confirmation dialog is required as restoring completely overwrites the
+        # target. Surface any mounts so the user knows what is being erased (the
+        # running root disk is hard-refused by the backend regardless).
+        mount_note = ""
+        dest_mounts = [dest_drive.mountpoint] if dest_drive.mountpoint else []
+        dest_mounts += [c.mountpoint for c in (dest_drive.children or []) if c.mountpoint]
+        if dest_mounts:
+            mount_note = f"\n\nNOTE: {dest_drive.name} is currently mounted at {', '.join(dest_mounts)}."
         dialog = Adw.MessageDialog(
             transient_for=self.window,
             heading="Confirm Restore",
-            body=f"Restore {self.selected_file_path} to {dest_drive.name}?\n\nALL DATA ON {dest_drive.name} WILL BE LOST!",
+            body=f"Restore {self.selected_file_path} to {dest_drive.name}?\n\nALL DATA ON {dest_drive.name} WILL BE LOST!{mount_note}",
         )
         dialog.add_response("cancel", "Cancel")
         dialog.add_response("restore", "Start Restore")
@@ -141,10 +161,18 @@ class RestorePage(Gtk.Box):
             dest: Target USB drive path.
         """
         try:
-            restore_from_image(source, dest, update_callback=self._update_progress)
-            GLib.idle_add(self._finished, True, None)
+            # The user confirmed the destructive restore, so permit a mounted
+            # (non-root) destination; the backend still refuses the root disk.
+            restore_from_image(
+                source, dest,
+                update_callback=self._update_progress,
+                allow_mounted_dest=True,
+            )
+            GLib.idle_add(self._finished, "ok", None)
+        except UnsafeOperationError as error:
+            GLib.idle_add(self._finished, "refused", str(error))
         except Exception as error:
-            GLib.idle_add(self._finished, False, str(error))
+            GLib.idle_add(self._finished, "failed", str(error))
 
     def _update_progress(self, line: str):
         """Callback to marshal restore status messages back to the UI.
@@ -154,17 +182,20 @@ class RestorePage(Gtk.Box):
         """
         GLib.idle_add(self.restore_status_label.set_text, line)
 
-    def _finished(self, success: bool, error_msg: str):
+    def _finished(self, status: str, error_msg: str):
         """Update buttons status, set final status labels, and show alert dialogs.
 
         Args:
-            success: Whether the restore completed successfully.
-            error_msg: String explaining errors if success is False.
+            status: One of "ok", "refused", or "failed".
+            error_msg: String explaining errors for the non-"ok" outcomes.
         """
         self.restore_btn.set_sensitive(True)
-        if success:
+        if status == "ok":
             self.restore_status_label.set_text("Restore Complete!")
             self.show_success("Drive restored successfully.")
+        elif status == "refused":
+            self.restore_status_label.set_text("Refused for safety")
+            self.show_error(str(error_msg))
         else:
             self.restore_status_label.set_text("Restore Failed")
             self.show_error(str(error_msg))

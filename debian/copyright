@@ -1,9 +1,9 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: klon
-Source: https://github.com/chucktalk/klon
+Source: https://github.com/TaliskerMan/klon
 
 Files: *
-Copyright: 2026 Chuck Talk <cwtalk1@gmail.com>
+Copyright: 2026 Chuck Talk <chuck@nordheim.online>
 License: GPL-3+
 
 License: GPL-3+

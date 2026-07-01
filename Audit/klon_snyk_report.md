@@ -1,20 +1,40 @@
 # Klon Snyk Security Scan Report
 
-## Overview
-A comprehensive Snyk security scan was conducted against the **klon** application repository to identify potential vulnerabilities, exploits, coding mistakes, and vulnerable dependencies.
+## Scope and limitations
+
+This report records the output of automated Snyk scans (SAST + open-source
+dependency analysis). **A clean Snyk result is not a clean bill of health.**
+Snyk looks for known-vulnerable dependencies and a fixed set of insecure code
+patterns; it does **not** understand klon's threat model, which is dominated by
+*correct-but-destructive* behaviour — writing `dd` to the wrong block device is
+catastrophic yet contains no "vulnerability" a scanner would flag.
+
+The findings below should be read alongside the manual assessment
+(`klon_Assessment_and_Path_to_Production.md`), which identified real defects
+(broken backup-to-image, missing destructive-write guards, unverified ISO
+downloads, and more) that automated scanning did not and could not surface.
 
 ## Scan Results
 
 ### 1. Snyk Code Scan (SAST)
-- **Target Path**: `/home/freecode/antigrav/klon`
 - **Result**: `0` vulnerabilities found.
-- **Analysis**: Snyk's Static Application Security Testing engine analyzed the Python codebase and identified no insecure coding patterns or structural flaws. 
-  - **Manual Verification**: A manual inspection of the backend processes (e.g., `clone.py`) confirmed that all privileged commands executed via `subprocess` and `pkexec` are invoked using secure, array-based formatting. This effectively neutralizes any potential for shell injection attacks, even when interacting with sensitive system block devices.
+- **Interpretation**: No known insecure-code *patterns* were matched. Privileged
+  commands are invoked via array-form `subprocess`/`pkexec` (no shell string),
+  which removes the shell-injection surface. This is necessary but not
+  sufficient: the dangerous operations here are legitimate `dd`/`sgdisk` writes
+  whose safety depends on *which device* they target — logic a SAST tool does
+  not evaluate.
 
 ### 2. Snyk Open Source (SCA)
-- **Target Path**: `/home/freecode/antigrav/klon`
-- **Result**: `0` vulnerabilities found.
-- **Analysis**: Snyk analyzed the project's dependencies to identify vulnerabilities. The project uses standard and actively maintained Python packages (such as `PyGObject` and `requests`), none of which are introducing known CVEs or supply chain flaws in their current configuration.
+- **Result**: `0` known-vulnerable dependencies found.
+- **Interpretation**: The direct dependencies (`PyGObject`, `requests`) carried
+  no known CVEs at scan time. Re-run on each dependency bump; a clean result is
+  a point-in-time snapshot, not a guarantee.
 
 ## Conclusion
-The **klon** application is currently in a highly secure state. No code-level vulnerabilities or supply chain risks were detected by Snyk or during the manual review process. No remediation steps are required at this time.
+
+Automated scanning found no known-pattern or known-CVE issues. The project's
+actual risk is controlled by the destructive-write safety guards
+(`src/klon/backend/safety.py`) and their tests (`tests/test_safety.py`), and by
+the ISO checksum verification — none of which are validated by these scans.
+Treat this report as one input among several, not as sign-off.

@@ -12,7 +12,20 @@ from gi.repository import Gtk, Adw, GLib
 import threading
 
 from ...backend.drives import list_drives
-from ...backend.clone import clone_drive
+from ...backend.clone import clone_drive, verify_clone
+from ...backend.safety import UnsafeOperationError
+
+
+def _drive_label(d):
+    """Human label including any mountpoint(s) so in-use disks are obvious."""
+    mounts = []
+    if getattr(d, "mountpoint", None):
+        mounts.append(d.mountpoint)
+    for child in getattr(d, "children", []) or []:
+        if getattr(child, "mountpoint", None):
+            mounts.append(child.mountpoint)
+    suffix = f" — mounted: {', '.join(mounts)}" if mounts else ""
+    return f"{d.model} ({d.name}) - {d.size}{suffix}"
 
 @Gtk.Template(resource_path='/com/taliskerman/klon/clone_page.ui')
 class ClonePage(Gtk.Box):
@@ -45,8 +58,8 @@ class ClonePage(Gtk.Box):
     def refresh_drives(self):
         """Refresh system physical drives and populate source and destination dropdowns."""
         self.drives = list_drives()
-        drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
-        
+        drive_strings = [_drive_label(d) for d in self.drives]
+
         self.source_model = Gtk.StringList.new(drive_strings)
         self.dest_model = Gtk.StringList.new(drive_strings)
         
@@ -73,11 +86,18 @@ class ClonePage(Gtk.Box):
             self.show_error("Source and Destination cannot be the same drive.")
             return
 
-        # Explicit destructive warning dialog
+        # Explicit destructive warning dialog. If the destination has mounted
+        # filesystems, spell that out so the user knows what they're erasing
+        # (the running root disk is hard-refused by the backend regardless).
+        mount_note = ""
+        dest_mounts = [dest_drive.mountpoint] if dest_drive.mountpoint else []
+        dest_mounts += [c.mountpoint for c in (dest_drive.children or []) if c.mountpoint]
+        if dest_mounts:
+            mount_note = f"\n\nNOTE: {dest_drive.name} is currently mounted at {', '.join(dest_mounts)}."
         dialog = Adw.MessageDialog(
             transient_for=self.window,
             heading="Confirm Cloning",
-            body=f"Are you sure you want to clone {source_drive.name} to {dest_drive.name}?\n\nALL DATA ON {dest_drive.name} WILL BE LOST!",
+            body=f"Are you sure you want to clone {source_drive.name} to {dest_drive.name}?\n\nALL DATA ON {dest_drive.name} WILL BE LOST!{mount_note}",
         )
         dialog.add_response("cancel", "Cancel")
         dialog.add_response("clone", "Clone Drive")
@@ -120,10 +140,19 @@ class ClonePage(Gtk.Box):
             dest_path: Target drive destination path node.
         """
         try:
-            clone_drive(source_path, dest_path, update_callback=self._update_progress)
-            GLib.idle_add(self._clone_finished, True, None)
+            # The user confirmed the destructive clone, so permit a mounted
+            # (non-root) destination; the backend still refuses the root disk.
+            clone_drive(
+                source_path, dest_path,
+                update_callback=self._update_progress,
+                allow_mounted_dest=True,
+            )
+            verified = verify_clone(source_path, dest_path, update_callback=self._update_progress)
+            GLib.idle_add(self._clone_finished, "verified" if verified else "unverified", None)
+        except UnsafeOperationError as error:
+            GLib.idle_add(self._clone_finished, "refused", str(error))
         except Exception as error:
-            GLib.idle_add(self._clone_finished, False, str(error))
+            GLib.idle_add(self._clone_finished, "failed", str(error))
 
     def _update_progress(self, status_line: str):
         """Callback to marshal status messages back to the GTK main UI loop.
@@ -133,17 +162,26 @@ class ClonePage(Gtk.Box):
         """
         GLib.idle_add(self.clone_status_label.set_text, status_line)
 
-    def _clone_finished(self, success: bool, error_msg: str):
+    def _clone_finished(self, status: str, error_msg: str):
         """Update buttons status, set final status labels, and show alert dialogs.
 
         Args:
-            success: Whether cloning completed successfully.
-            error_msg: String explaining errors if success is False.
+            status: One of "verified", "unverified", "refused", or "failed".
+            error_msg: String explaining errors for the non-success outcomes.
         """
         self.clone_button.set_sensitive(True)
-        if success:
-            self.clone_status_label.set_text("Cloning Complete!")
-            self.show_success("Drive cloned successfully.")
+        if status == "verified":
+            self.clone_status_label.set_text("Cloning Complete (verified)!")
+            self.show_success("Drive cloned successfully and verified (SHA-256 match).")
+        elif status == "unverified":
+            self.clone_status_label.set_text("Cloned (unverified)")
+            self.show_success(
+                "Drive cloned, but read-back verification could not be completed "
+                "(e.g. insufficient read permission). The copy may still be good."
+            )
+        elif status == "refused":
+            self.clone_status_label.set_text("Refused for safety")
+            self.show_error(str(error_msg))
         else:
             self.clone_status_label.set_text("Cloning Failed")
             self.show_error(f"Error: {error_msg}")

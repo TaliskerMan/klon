@@ -12,6 +12,19 @@ import threading
 
 from ...backend.drives import list_drives
 from ...backend.clone import backup_to_image
+from ...backend.safety import UnsafeOperationError
+
+
+def _drive_label(d):
+    """Human label including any mountpoint(s) so in-use disks are obvious."""
+    mounts = []
+    if getattr(d, "mountpoint", None):
+        mounts.append(d.mountpoint)
+    for child in getattr(d, "children", []) or []:
+        if getattr(child, "mountpoint", None):
+            mounts.append(child.mountpoint)
+    suffix = f" — mounted: {', '.join(mounts)}" if mounts else ""
+    return f"{d.model} ({d.name}) - {d.size}{suffix}"
 
 @Gtk.Template(resource_path='/com/taliskerman/klon/backup_page.ui')
 class BackupPage(Gtk.Box):
@@ -47,7 +60,7 @@ class BackupPage(Gtk.Box):
     def refresh_drives(self):
         """Scan physical drives via backend list_drives and populate the dropdown menu."""
         self.drives = list_drives()
-        drive_strings = [f"{d.model} ({d.name}) - {d.size}" for d in self.drives]
+        drive_strings = [_drive_label(d) for d in self.drives]
         self.source_model = Gtk.StringList.new(drive_strings)
         self.backup_source_dropdown.set_model(self.source_model)
 
@@ -144,9 +157,11 @@ class BackupPage(Gtk.Box):
         """
         try:
             backup_to_image(source, dest, update_callback=self._update_progress)
-            GLib.idle_add(self._finished, True, None)
+            GLib.idle_add(self._finished, "ok", None)
+        except UnsafeOperationError as error:
+            GLib.idle_add(self._finished, "refused", str(error))
         except Exception as error:
-            GLib.idle_add(self._finished, False, str(error))
+            GLib.idle_add(self._finished, "failed", str(error))
 
     def _update_progress(self, line: str):
         """Callback to marshal status messages back to the GTK main UI loop.
@@ -156,17 +171,20 @@ class BackupPage(Gtk.Box):
         """
         GLib.idle_add(self.backup_status_label.set_text, line)
 
-    def _finished(self, success: bool, error_msg: str):
+    def _finished(self, status: str, error_msg: str):
         """Update buttons status, set final status labels, and show alert dialogs.
 
         Args:
-            success: Whether the backup completed successfully.
-            error_msg: String explaining errors if success is False.
+            status: One of "ok", "refused", or "failed".
+            error_msg: String explaining errors for the non-"ok" outcomes.
         """
         self.backup_btn.set_sensitive(True)
-        if success:
+        if status == "ok":
             self.backup_status_label.set_text("Backup Complete!")
             self.show_success(f"Backup saved to {self.selected_file_path}")
+        elif status == "refused":
+            self.backup_status_label.set_text("Refused for safety")
+            self.show_error(str(error_msg))
         else:
             self.backup_status_label.set_text("Backup Failed")
             self.show_error(str(error_msg))
