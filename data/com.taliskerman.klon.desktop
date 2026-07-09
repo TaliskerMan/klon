@@ -8,3 +8,4 @@ Type=Application
 Categories=System;Utility;Archiving;
 Keywords=backup;clone;restore;disk;iso;usb;
 StartupNotify=true
+StartupWMClass=com.taliskerman.klon

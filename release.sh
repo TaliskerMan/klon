@@ -33,7 +33,7 @@ dch -r ""
 # Commit version bump
 git add pyproject.toml debian/changelog
 git commit -m "Bump version to $NEW_VERSION"
-git push
+git push || true
 
 # Build package
 echo "Building package..."
@@ -62,8 +62,28 @@ echo "$SHA512 $DEB_FILE" > "${DEB_FILE}.sha512"
 gpg --armor --detach-sign --default-key "$KEY_ID" "$DEB_FILE"
 gpg --armor --export "$KEY_ID" > "artifacts/pubkey.asc"
 
-# Create GitHub Release
-echo "Creating GitHub release..."
-gh release create "v$NEW_VERSION" "$DEB_FILE" "${DEB_FILE}.asc" "artifacts/pubkey.asc" "${DEB_FILE}.sha512" --title "v$NEW_VERSION" --notes "Release v$NEW_VERSION\n\nSHA512: $SHA512"
+# Copy to NOBuilds directory
+echo "Copying to NOBuilds directory..."
+NOBUILDS_DIR="${HOME}/NOBuilds/klon/v${NEW_VERSION}"
+mkdir -p "${NOBUILDS_DIR}"
+
+# Generate source code archive
+echo "Generating source tarball..."
+tar --exclude=debian --exclude=.git --exclude=artifacts --exclude=__pycache__ --exclude=build --exclude=.pybuild -czf "${NOBUILDS_DIR}/klon_source.tar.gz" .
+
+# Copy packages and signatures
+cp "$DEB_FILE" "${NOBUILDS_DIR}/"
+cp "${DEB_FILE}.asc" "${NOBUILDS_DIR}/" || true
+cp "${DEB_FILE}.sha512" "${NOBUILDS_DIR}/" || true
+cp "artifacts/pubkey.asc" "${NOBUILDS_DIR}/" || true
+
+# Copy license, readme, and sbom
+cp LICENSE "${NOBUILDS_DIR}/"
+cp README.md "${NOBUILDS_DIR}/"
+cp Audit/sbom.json "${NOBUILDS_DIR}/"
+
+# Create GitHub Release (optional, ignore errors if offline)
+echo "Creating GitHub release (optional)..."
+gh release create "v$NEW_VERSION" "$DEB_FILE" "${DEB_FILE}.asc" "artifacts/pubkey.asc" "${DEB_FILE}.sha512" --title "v$NEW_VERSION" --notes "Release v$NEW_VERSION\n\nSHA512: $SHA512" || true
 
 echo "Release v$NEW_VERSION completed successfully!"
