@@ -3,7 +3,7 @@
 Welcome to the **Klon** workstation cloning and disaster recovery manual. Klon is a specialized system administration utility built in Python (GTK4 + Libadwaita) to help GNOME workstation administrators clone, back up, and restore physical Linux volumes in emergencies.
 
 > [!CAUTION]
-> **CRITICAL WARNING: BETA PHASE (v0.2.9)**
+> **CRITICAL WARNING: BETA PHASE (v0.3.2)**
 > **Klon is currently in the beta phase and should be used with caution in production environments.** 
 > Using block-level cloning utilities on production storage hosts at this stage carries risk of data loss or corrupted volumes. Limit your use of this software strictly to experimental, verification, or non-critical storage pools.
 
@@ -22,9 +22,9 @@ Klon is organized into distinct functional screens designed to simplify high-str
 
 ---
 
-## 🛠️ 2. GUI Polish & Recent Changes (v0.2.0+)
+## 🛠️ 2. GUI Polish & Recent Changes (v0.3.2)
 
-Version `0.2.x` introduces massive usability changes, desktop scaling improvements, and crash fixes:
+Version `0.3.2` introduces massive usability changes, desktop scaling improvements, and crash fixes:
 
 ### UI & Aesthetics Refined
 *   **Minimal Bold Navigation:** Replaced complex tab widgets with simplified, text-only bold headers to avoid confusion.
