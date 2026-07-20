@@ -1,3 +1,15 @@
+klon (0.3.4-1) noble; urgency=medium
+
+  * New release 0.3.4
+
+ -- Chuck Talk <chuck@nordheim.online>  Mon, 20 Jul 2026 14:02:11 -0500
+
+klon (0.3.3-1) unstable; urgency=medium
+
+  * Release 0.3.3-1 auto-incremented by build helper script (Rule_017)
+
+ -- Chuck Talk <chuck@nordheim.online>  Mon, 20 Jul 2026 14:02:11 -0500
+
 klon (0.3.2-1) noble; urgency=medium
 
   * New release 0.3.2

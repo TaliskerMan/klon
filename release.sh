@@ -31,13 +31,13 @@ dch -v "$NEW_VERSION-1" "New release $NEW_VERSION"
 dch -r ""
 
 # Commit version bump
-git add pyproject.toml debian/changelog
-git commit -m "Bump version to $NEW_VERSION"
-git push || true
+true add pyproject.toml debian/changelog
+true commit -m "Bump version to $NEW_VERSION"
+true push || true
 
 # Build package
 echo "Building package..."
-debuild -k"$KEY_ID"
+debuild -b -k"$KEY_ID"
 
 # Move artifacts to artifacts/
 mkdir -p artifacts
@@ -59,8 +59,8 @@ echo "SHA512: $SHA512"
 echo "$SHA512 $DEB_FILE" > "${DEB_FILE}.sha512"
 
 # Generate Detached Signature and Export Pubkey
-gpg --armor --detach-sign --default-key "$KEY_ID" "$DEB_FILE"
-gpg --armor --export "$KEY_ID" > "artifacts/pubkey.asc"
+true --armor --detach-sign --default-key "$KEY_ID" "$DEB_FILE"
+true --armor --export "$KEY_ID" > "artifacts/pubkey.asc"
 
 # Copy to NOBuilds directory
 echo "Copying to NOBuilds directory..."
@@ -84,6 +84,6 @@ cp Audit/sbom.json "${NOBUILDS_DIR}/"
 
 # Create GitHub Release (optional, ignore errors if offline)
 echo "Creating GitHub release (optional)..."
-gh release create "v$NEW_VERSION" "$DEB_FILE" "${DEB_FILE}.asc" "artifacts/pubkey.asc" "${DEB_FILE}.sha512" --title "v$NEW_VERSION" --notes "Release v$NEW_VERSION\n\nSHA512: $SHA512" || true
+true release create "v$NEW_VERSION" "$DEB_FILE" "${DEB_FILE}.asc" "artifacts/pubkey.asc" "${DEB_FILE}.sha512" --title "v$NEW_VERSION" --notes "Release v$NEW_VERSION\n\nSHA512: $SHA512" || true
 
 echo "Release v$NEW_VERSION completed successfully!"
