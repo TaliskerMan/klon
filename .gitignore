@@ -128,3 +128,4 @@ release_artifacts/
 
 # macOS
 .DS_Store
+sonar-project.properties

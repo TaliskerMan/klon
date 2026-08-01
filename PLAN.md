@@ -6,3 +6,4 @@
 - [ ] Implement copyright migrations & source compliance for `chuck@nordheim.online` (`Rule 16`)
 - [ ] Overhaul `release.sh` to construct detached signatures and push `pubkey.asc` validations (`Rule 4`)
 - Add SonarQube project configuration (sonar-project.properties)
+- Untrack sonar-project.properties from GitHub and add to .gitignore
